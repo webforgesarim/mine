@@ -469,4 +469,5 @@ html[data-accent="cyan"]{--pfx:61,214,245}html[data-accent="green"]{--pfx:74,222
 body{top:0!important}
 .skiptranslate iframe,.goog-te-banner-frame{display:none!important}
 #gt{position:absolute;left:-9999px;top:0;width:1px;height:1px;overflow:hidden}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .goog-text-highlight{background:none!important;box-shadow:none!important}
