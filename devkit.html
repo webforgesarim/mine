@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Developer toolkit | Joseph</title>
+<meta name="description" content="Free browser tools for developers: JSON formatter, regex tester, text diff, timestamp converter and colour contrast checker. Nothing leaves your device.">
+<meta name="theme-color" content="#0A0F2A">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0F2A;--ink:#EEF1F7;--mute:#A3AECB;--line:rgba(255,255,255,.18);--acc:#FF7A45;--g:#7CFFB2;--bad:#FF8A80;
+  --display:'Bricolage Grotesque','Segoe UI',Arial,sans-serif;--body:'Public Sans','Segoe UI',Arial,sans-serif;--mono:ui-monospace,Menlo,Consolas,monospace;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg) radial-gradient(60% 40% at 80% 0%,rgba(255,122,69,.16),transparent 70%) no-repeat;color:var(--ink);font:1.0625rem/1.6 var(--body)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px;border-radius:6px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:.9rem clamp(1rem,3vw,2rem);border-bottom:1px solid var(--line)}
+.top a{text-decoration:none;color:var(--mute);font-size:.92rem}
+.top .brand{font:800 1.2rem var(--display);color:var(--ink)}.brand span{color:var(--acc)}
+main{width:min(980px,100% - 2rem);margin:0 auto;padding:2.5rem 0 3rem}
+h1{font:800 clamp(2rem,6vw,3.4rem)/1.05 var(--display);letter-spacing:-.03em;margin:0 0 .6rem}
+.lead,.note{color:var(--mute)}.lead{margin:0 0 1.4rem}.note{font-size:.88rem;margin:0}
+.tabs{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem}
+.tabs button{padding:.55rem 1rem;border:1px solid var(--line);border-radius:99px;background:rgba(255,255,255,.06);cursor:pointer;font-weight:600}
+.tabs button[aria-selected="true"]{background:var(--acc);border-color:var(--acc);color:#0A0F2A}
+.card{border:1px solid var(--line);border-radius:20px;padding:1.3rem;background:rgba(255,255,255,.05);display:grid;gap:.9rem}
+label{font-size:.85rem;font-weight:600;color:var(--mute)}
+textarea,input[type=text],select{width:100%;background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:12px;padding:.7rem .85rem}
+textarea{font:.9rem/1.5 var(--mono);min-height:170px;resize:vertical;white-space:pre;tab-size:2}
+select option{color:#0A0F2A;background:#fff}
+input[type=color]{width:56px;height:44px;border:1px solid var(--line);border-radius:10px;background:none;padding:2px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--acc)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}.fld{display:grid;gap:.3rem;min-width:0}
+.row{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center}
+.btn{padding:.55rem 1.1rem;border-radius:99px;border:2px solid var(--ink);background:none;cursor:pointer;font-weight:600}
+.btn:hover{background:var(--ink);color:var(--bg)}
+.btn.p{background:var(--acc);border-color:var(--acc);color:#0A0F2A}.btn.p:hover{opacity:.9;background:var(--acc)}
+.btn:disabled{opacity:.5;cursor:wait}
+.err{color:var(--bad);min-height:1.3em;margin:0;font-size:.92rem}.ok{color:var(--g);margin:0;min-height:1.3em;font-size:.92rem}
+.out{font:.88rem/1.55 var(--mono);background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:12px;padding:.8rem;margin:0;white-space:pre-wrap;word-break:break-word;min-height:3rem;max-height:420px;overflow:auto}
+mark{background:rgba(255,122,69,.45);color:#fff;border-radius:3px}
+.add{background:rgba(124,255,178,.16);display:block}.del{background:rgba(255,138,128,.18);display:block}.same{display:block;color:var(--mute)}
+.kv{display:grid;grid-template-columns:150px 1fr auto;gap:.5rem .8rem;align-items:center}
+.kv span{color:var(--mute);font-size:.88rem}.kv code{font:.9rem var(--mono);word-break:break-all}
+.mini{padding:.3rem .65rem;border-radius:9px;border:1px solid var(--line);background:rgba(255,255,255,.07);cursor:pointer;font-size:.85rem}
+.sw{height:72px;border-radius:14px;border:1px solid var(--line)}
+.pf{display:inline-block;padding:.15rem .6rem;border-radius:99px;font-size:.8rem;font-weight:700}
+.pf.y{background:rgba(124,255,178,.2);color:var(--g)}.pf.n{background:rgba(255,138,128,.2);color:var(--bad)}
+[hidden]{display:none!important}
+.toast{position:fixed;left:50%;bottom:1.5rem;transform:translate(-50%,160%);background:var(--ink);color:var(--bg);padding:.7rem 1.2rem;border-radius:10px;transition:transform .3s}
+.toast.show{transform:translate(-50%,0)}
+@media (max-width:640px){.g2{grid-template-columns:1fr}.kv{grid-template-columns:1fr auto}.kv span{grid-column:1/-1}}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+</style>
+<link rel="stylesheet" href="responsive.css">
+</head>
+<body>
+<header class="top"><a class="brand" href="index.html">Joseph<span>.</span></a><a href="index.html">Back to portfolio</a></header>
+<main>
+  <h1>Developer toolkit</h1>
+  <p class="lead">Five small tools I use every week. They all run inside your browser, and nothing you paste is sent anywhere.</p>
+  <div class="tabs" role="tablist" aria-label="Tools" id="tabs">
+    <button type="button" role="tab" data-p="t1" aria-selected="true">JSON</button>
+    <button type="button" role="tab" data-p="t2" aria-selected="false">Regex</button>
+    <button type="button" role="tab" data-p="t3" aria-selected="false">Text diff</button>
+    <button type="button" role="tab" data-p="t4" aria-selected="false">Timestamp</button>
+    <button type="button" role="tab" data-p="t5" aria-selected="false">Colour</button>
+  </div>
+
+  <section class="card" id="t1" role="tabpanel">
+    <div class="fld"><label for="jin">JSON</label><textarea id="jin" spellcheck="false" placeholder='{"name":"Joseph","skills":["web","linux"]}'></textarea></div>
+    <div class="row">
+      <button class="btn p" id="jf" type="button">Format</button><button class="btn" id="jm" type="button">Minify</button>
+      <label for="ji" style="margin-left:.4rem">Indent</label><select id="ji" style="width:auto"><option value="2">2 spaces</option><option value="4">4 spaces</option><option value="t">Tab</option></select>
+      <label><input type="checkbox" id="js"> Sort keys</label>
+    </div>
+    <p class="err" id="je" role="alert"></p><p class="ok" id="jo" role="status"></p>
+    <pre class="out" id="jout"></pre>
+    <div class="row"><button class="btn" type="button" data-copy="jout">Copy result</button></div>
+  </section>
+
+  <section class="card" id="t2" role="tabpanel" hidden>
+    <div class="g2">
+      <div class="fld"><label for="rp">Pattern</label><input id="rp" type="text" spellcheck="false" autocomplete="off" placeholder="(\w+)@(\w+)\.com"></div>
+      <div class="fld"><label for="rf">Flags</label><input id="rf" type="text" value="gi" maxlength="6" spellcheck="false" autocomplete="off"></div>
+    </div>
+    <div class="fld"><label for="rt">Test text</label><textarea id="rt" spellcheck="false" style="white-space:pre-wrap">Write to hello@webforge studio.com or Joseph@example.com today.</textarea></div>
+    <p class="err" id="re" role="alert"></p><p class="ok" id="rc" role="status"></p>
+    <div class="out" id="rh" aria-label="Text with matches highlighted"></div>
+    <div class="out" id="rg" aria-label="Match list" hidden></div>
+    <p class="note">The expression runs in a background worker and stops after 1.5 seconds, so a bad pattern cannot freeze the page. The g flag is always on.</p>
+  </section>
+
+  <section class="card" id="t3" role="tabpanel" hidden>
+    <div class="g2">
+      <div class="fld"><label for="da">Original</label><textarea id="da" spellcheck="false"></textarea></div>
+      <div class="fld"><label for="db">Changed</label><textarea id="db" spellcheck="false"></textarea></div>
+    </div>
+    <div class="row"><button class="btn p" id="dg" type="button">Compare</button></div>
+    <p class="err" id="de" role="alert"></p><p class="ok" id="dc" role="status"></p>
+    <div class="out" id="dout" hidden></div>
+  </section>
+
+  <section class="card" id="t4" role="tabpanel" hidden>
+    <div class="fld"><label for="ti">Unix time (seconds or milliseconds) or a date</label><input id="ti" type="text" spellcheck="false" autocomplete="off" placeholder="1764000000 or 2026-11-24 15:30"></div>
+    <div class="row"><button class="btn" id="tn" type="button">Use current time</button></div>
+    <p class="err" id="te" role="alert"></p>
+    <div class="kv" id="tk"></div>
+  </section>
+
+  <section class="card" id="t5" role="tabpanel" hidden>
+    <div class="row"><input type="color" id="cp" value="#ff7a45" aria-label="Pick a colour"><div class="fld" style="flex:1;min-width:160px"><label for="ch">Hex colour</label><input id="ch" type="text" value="#FF7A45" spellcheck="false" autocomplete="off"></div></div>
+    <p class="err" id="ce" role="alert"></p>
+    <div class="sw" id="cs" aria-hidden="true"></div>
+    <div class="kv" id="ck"></div>
+  </section>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)};
+  var E=function(t,x){var e=document.createElement(t);if(x!==undefined)e.textContent=x;return e};
+  var toast=function(m){var t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.h);toast.h=setTimeout(function(){t.classList.remove('show')},1800)};
+  var copy=function(v){if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(function(){toast('Copied')},function(){toast('Copy failed')});else toast('Select the text and copy it')};
+  document.addEventListener('click',function(e){var b=e.target.closest('[data-copy]');if(b){var el=$(b.dataset.copy);copy(el.value!==undefined&&el.tagName!=='PRE'&&el.tagName!=='DIV'?el.value:el.textContent)}});
+  var tabs=document.querySelectorAll('#tabs button');
+  tabs.forEach(function(b){b.addEventListener('click',function(){tabs.forEach(function(x){x.setAttribute('aria-selected',x===b);$(x.dataset.p).hidden=x!==b})})});
+
+  /* 1. JSON */
+  var sortK=function(v){if(Array.isArray(v))return v.map(sortK);if(v&&typeof v==='object'){var o={};Object.keys(v).sort().forEach(function(k){o[k]=sortK(v[k])});return o}return v};
+  var json=function(min){
+    $('je').textContent='';$('jo').textContent='';
+    var s=$('jin').value;if(!s.trim()){$('je').textContent='Please paste some JSON first.';return}
+    try{
+      var v=JSON.parse(s);if($('js').checked)v=sortK(v);
+      var ind=$('ji').value==='t'?'\t':+$('ji').value;
+      $('jout').textContent=min?JSON.stringify(v):JSON.stringify(v,null,ind);
+      $('jo').textContent='Valid JSON. '+$('jout').textContent.length+' characters.';
+    }catch(e){$('jout').textContent='';$('je').textContent='Invalid JSON: '+e.message}
+  };
+  $('jf').onclick=function(){json(false)};$('jm').onclick=function(){json(true)};
+
+  /* 2. Regex (in a worker, with a time limit) */
+  var WSRC='onmessage=function(e){try{var r=new RegExp(e.data.s,e.data.f),o=[],m;for(m of e.data.t.matchAll(r)){o.push([m.index,m[0],m.slice(1)]);if(o.length>=500)break}postMessage({ok:o})}catch(x){postMessage({err:String(x.message)})}}';
+  var wk=null,seq=0,tmr=0;
+  var stopW=function(){if(wk){wk.terminate();wk=null}clearTimeout(tmr)};
+  var rx=function(){
+    var n=++seq;stopW();
+    $('re').textContent='';$('rc').textContent='';$('rg').hidden=true;
+    var p=$('rp').value,t=$('rt').value;
+    $('rh').textContent=t;
+    if(!p)return;
+    var f=($('rf').value.replace(/[^dgimsuvy]/g,'')+'g').split('').filter(function(c,i,a){return a.indexOf(c)===i}).join('');
+    try{new RegExp(p,f)}catch(e){$('re').textContent='Invalid pattern: '+e.message;return}
+    if(t.length>50000){$('re').textContent='Please keep the test text under 50,000 characters.';return}
+    wk=new Worker(URL.createObjectURL(new Blob([WSRC],{type:'text/javascript'})));
+    tmr=setTimeout(function(){stopW();if(n===seq)$('re').textContent='Stopped: this pattern took more than 1.5 seconds. It may backtrack too much.'},1500);
+    wk.onmessage=function(e){
+      stopW();if(n!==seq)return;
+      if(e.data.err){$('re').textContent='Error: '+e.data.err;return}
+      var ms=e.data.ok,h=$('rh'),pos=0;h.textContent='';
+      ms.forEach(function(m){
+        if(m[0]<pos||!m[1].length)return;
+        h.appendChild(document.createTextNode(t.slice(pos,m[0])));h.appendChild(E('mark',m[1]));pos=m[0]+m[1].length;
+      });
+      h.appendChild(document.createTextNode(t.slice(pos)));
+      $('rc').textContent=ms.length+(ms.length===1?' match':' matches')+(ms.length>=500?' (showing the first 500)':'');
+      var g=$('rg');g.textContent='';
+      ms.slice(0,50).forEach(function(m,i){
+        var d=E('div',(i+1)+'. "'+m[1]+'" at '+m[0]+(m[2].length?'   groups: '+m[2].map(function(x,k){return (k+1)+'='+(x===undefined?'-':'"'+x+'"')}).join(', '):''));g.appendChild(d);
+      });
+      g.hidden=!ms.length;
+    };
+    wk.onerror=function(){stopW()};
+    wk.postMessage({s:p,f:f,t:t});
+  };
+  ['rp','rf','rt'].forEach(function(i){$(i).addEventListener('input',rx)});rx();
+
+  /* 3. Diff */
+  $('dg').onclick=function(){
+    $('de').textContent='';$('dc').textContent='';
+    var a=$('da').value.split('\n'),b=$('db').value.split('\n'),n=a.length,m=b.length,o=$('dout');
+    if(n>1500||m>1500){$('de').textContent='Please keep each text under 1,500 lines.';return}
+    var w=m+1,L=new Uint16Array((n+1)*w),i,j;
+    for(i=n-1;i>=0;i--)for(j=m-1;j>=0;j--)L[i*w+j]=a[i]===b[j]?L[(i+1)*w+j+1]+1:Math.max(L[(i+1)*w+j],L[i*w+j+1]);
+    o.textContent='';o.hidden=false;
+    var add=0,del=0,row=function(c,p,s){var d=E('span',p+s);d.className=c;o.appendChild(d)};
+    i=0;j=0;
+    while(i<n&&j<m){
+      if(a[i]===b[j]){row('same','  ',a[i]);i++;j++}
+      else if(L[(i+1)*w+j]>=L[i*w+j+1]){row('del','- ',a[i]);i++;del++}
+      else{row('add','+ ',b[j]);j++;add++}
+    }
+    while(i<n){row('del','- ',a[i++]);del++}
+    while(j<m){row('add','+ ',b[j++]);add++}
+    $('dc').textContent=add||del?add+' added, '+del+' removed.':'The two texts are identical.';
+  };
+
+  /* 4. Timestamp */
+  var rel=function(ms){
+    var s=Math.round((ms-Date.now())/1000),a=Math.abs(s),u=[['year',31536000],['month',2592000],['day',86400],['hour',3600],['minute',60],['second',1]];
+    for(var k=0;k<u.length;k++)if(a>=u[k][1]||k===5){var v=Math.round(a/u[k][1]);return (s<0?'':'in ')+v+' '+u[k][0]+(v===1?'':'s')+(s<0?' ago':'')}
+  };
+  var ts=function(){
+    var v=$('ti').value.trim(),k=$('tk');k.textContent='';$('te').textContent='';
+    if(!v)return;
+    var ms;
+    if(/^-?\d+(\.\d+)?$/.test(v)){var x=+v;ms=Math.abs(x)>=1e11?x:x*1000}else ms=Date.parse(v);
+    var d=new Date(ms);
+    if(isNaN(d)||Math.abs(ms)>8.64e15){$('te').textContent='Could not read that. Try 1764000000 or 2026-11-24 15:30.';return}
+    [['Unix seconds',String(Math.floor(ms/1000))],['Unix milliseconds',String(Math.floor(ms))],['ISO 8601 (UTC)',d.toISOString()],['Local time',d.toString()],['Pakistan time',d.toLocaleString('en-GB',{timeZone:'Asia/Karachi',dateStyle:'full',timeStyle:'medium'})],['Relative',rel(ms)]].forEach(function(r){
+      var c=E('code',r[1]),b=E('button','Copy');b.type='button';b.className='mini';b.onclick=function(){copy(r[1])};
+      k.appendChild(E('span',r[0]));k.appendChild(c);k.appendChild(b);
+    });
+  };
+  $('ti').addEventListener('input',ts);$('tn').onclick=function(){$('ti').value=String(Math.floor(Date.now()/1000));ts()};
+  $('ti').value=String(Math.floor(Date.now()/1000));ts();
+
+  /* 5. Colour */
+  var lum=function(c){return .2126*lin(c[0])+.7152*lin(c[1])+.0722*lin(c[2])};
+  var lin=function(v){v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)};
+  var ratio=function(a,b){var x=lum(a),y=lum(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)};
+  var hsl=function(c){
+    var r=c[0]/255,g=c[1]/255,b=c[2]/255,mx=Math.max(r,g,b),mn=Math.min(r,g,b),h=0,s=0,l=(mx+mn)/2,d=mx-mn;
+    if(d){s=d/(1-Math.abs(2*l-1));h=mx===r?((g-b)/d+(g<b?6:0)):mx===g?(b-r)/d+2:(r-g)/d+4;h*=60}
+    return [Math.round(h),Math.round(s*100),Math.round(l*100)];
+  };
+  var col=function(hex){
+    $('ce').textContent='';var k=$('ck');k.textContent='';
+    var h=hex.trim().replace(/^#/,'');
+    if(/^[0-9a-f]{3}$/i.test(h))h=h.replace(/./g,'$&$&');
+    if(!/^[0-9a-f]{6}$/i.test(h)){$('ce').textContent='Please enter a hex colour such as #FF7A45 or #f74.';return}
+    var c=[0,2,4].map(function(i){return parseInt(h.substr(i,2),16)}),H=hsl(c),X='#'+h.toUpperCase();
+    $('cs').style.background=X;$('cp').value=X.toLowerCase();
+    var w=ratio(c,[255,255,255]),bk=ratio(c,[0,0,0]);
+    var pf=function(r){var s=E('span',r>=7?'AAA pass':r>=4.5?'AA pass':r>=3?'Large text only':'Fail');s.className='pf '+(r>=4.5?'y':'n');return s};
+    [['Hex',X],['RGB','rgb('+c.join(', ')+')'],['HSL','hsl('+H[0]+', '+H[1]+'%, '+H[2]+'%)']].forEach(function(r){
+      var b=E('button','Copy');b.type='button';b.className='mini';b.onclick=function(){copy(r[1])};
+      k.appendChild(E('span',r[0]));k.appendChild(E('code',r[1]));k.appendChild(b);
+    });
+    [['With white text',w],['With black text',bk]].forEach(function(r){
+      k.appendChild(E('span',r[0]));var d=E('code',r[1].toFixed(2)+' : 1 ');d.appendChild(pf(r[1]));k.appendChild(d);k.appendChild(E('span',''));
+    });
+  };
+  $('ch').addEventListener('input',function(){col($('ch').value)});
+  $('cp').addEventListener('input',function(){$('ch').value=$('cp').value.toUpperCase();col($('cp').value)});
+  col($('ch').value);
+})();
+</script>
+<script src="code-rain.js" defer></script>
+</body>
+</html>

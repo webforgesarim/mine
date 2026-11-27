@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Live Earth – earthquakes right now | Joseph</title>
+<meta name="description" content="A real interactive globe with countries, cities and streets, showing live earthquakes from the USGS feed.">
+<meta name="theme-color" content="#050A1F">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css">
+<style>
+:root{--bg:#050A1F;--ink:#EEF1F7;--mute:#9AA5C2;--line:rgba(255,255,255,.16);--acc:#FF7A45;--display:'Bricolage Grotesque','Segoe UI',Arial,sans-serif;--body:'Public Sans','Segoe UI',Arial,sans-serif;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:1rem/1.55 var(--body)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px;border-radius:6px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:.9rem clamp(1rem,3vw,2rem);border-bottom:1px solid var(--line)}
+.top a{text-decoration:none;color:var(--mute);font-size:.92rem}
+.top .brand{font:800 1.2rem var(--display);color:var(--ink)}.brand span{color:var(--acc)}
+.app{display:grid;grid-template-columns:1fr 360px;gap:1rem;padding:1rem clamp(1rem,3vw,2rem) 2rem;max-width:1400px;margin:0 auto}
+.stage{position:relative;min-height:min(78vh,720px);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+#map{position:absolute;inset:0}
+.msg{position:absolute;inset:0;z-index:5;display:grid;place-content:center;gap:.8rem;text-align:center;padding:1.5rem;background:rgba(5,10,31,.88)}
+.msg[hidden]{display:none}
+.side{display:grid;gap:1rem;align-content:start}
+.card{border:1px solid var(--line);border-radius:18px;padding:1.1rem;background:rgba(255,255,255,.05)}
+.card h2{font:800 1.05rem var(--display);margin:0 0 .7rem}
+.seg{display:grid;gap:.4rem}
+.seg button,.btn{padding:.55rem .9rem;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.06);text-align:left}
+.seg button:hover,.btn:hover{border-color:var(--acc)}
+.seg button[aria-pressed="true"]{border-color:var(--acc);background:rgba(255,122,69,.18)}
+.btn{margin-top:.6rem;text-align:center}
+.st{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+.st b{display:block;font:800 1.6rem var(--display)}.st span,.note{font-size:.82rem;color:var(--mute)}
+.sel p{margin:.25rem 0;color:var(--mute);font-size:.95rem}.sel .big{font:800 2.4rem var(--display);color:var(--ink)}
+.list{list-style:none;margin:0;padding:0;display:grid;gap:.4rem}
+.list button{width:100%;display:flex;gap:.7rem;align-items:center;text-align:left;padding:.5rem .6rem;border:1px solid transparent;border-radius:10px;background:none}
+.list button:hover{background:rgba(255,255,255,.07);border-color:var(--line)}
+.list b{flex:none;min-width:2.6rem;font:800 1rem var(--display)}
+.list span{font-size:.88rem;color:var(--mute);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.key{display:flex;gap:1rem;flex-wrap:wrap;font-size:.8rem;color:var(--mute);margin-top:.6rem}
+.key i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:.35rem}
+footer{max-width:1400px;margin:0 auto;padding:0 clamp(1rem,3vw,2rem) 2rem;color:var(--mute);font-size:.85rem}
+@media (max-width:980px){.app{grid-template-columns:1fr}.stage{min-height:62vh}}
+</style>
+<link rel="stylesheet" href="responsive.css">
+</head>
+<body>
+<header class="top"><a class="brand" href="index.html">Joseph<span>.</span></a><a href="index.html">Back to portfolio</a></header>
+<div class="app">
+  <div class="stage">
+    <div id="map" aria-label="Interactive globe with live earthquakes. Use the list on the side to browse them."></div>
+    <div class="msg" id="msg" role="status"><b id="mt">Loading the map...</b><button class="btn" id="retry" type="button" hidden>Retry</button></div>
+  </div>
+  <aside class="side">
+    <section class="card"><h2>Time range</h2>
+      <div class="seg" id="seg">
+        <button type="button" data-f="2.5_day" aria-pressed="true">Past 24 hours (M2.5+)</button>
+        <button type="button" data-f="4.5_week" aria-pressed="false">Past 7 days (M4.5+)</button>
+        <button type="button" data-f="4.5_month" aria-pressed="false">Past 30 days (M4.5+)</button>
+      </div>
+      <button class="btn" id="spin" type="button" aria-pressed="true">Auto-rotate: on</button>
+    </section>
+    <section class="card"><div class="st"><div><b id="n1">-</b><span>Earthquakes</span></div><div><b id="n2">-</b><span>Strongest</span></div></div>
+      <p class="note" id="upd"></p>
+      <div class="key"><span><i style="background:#FF8A4C"></i>Shallow</span><span><i style="background:#FFD23F"></i>Medium</span><span><i style="background:#4DD8FF"></i>Deep</span></div></section>
+    <section class="card sel" aria-live="polite"><h2>Selected</h2><div id="sel"><p>Click a point on the map or pick one from the list. Zoom in to see the streets.</p></div></section>
+    <section class="card"><h2>Strongest right now</h2><ul class="list" id="list"></ul></section>
+  </aside>
+</div>
+<footer>Earthquake data: USGS live public feed. Map: &copy; OpenStreetMap contributors, tiles by OpenFreeMap. Earthquakes cannot be predicted; this page shows only what has already happened.</footer>
+<script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)};
+  var E=function(t,x){var e=document.createElement(t);if(x!==undefined)e.textContent=x;return e};
+  var say=function(t,r){$('mt').textContent=t;$('retry').hidden=!r;$('msg').hidden=false};
+  if(!window.maplibregl){say('The map library could not load. Check your internet connection.',true);$('retry').onclick=function(){location.reload()};return}
+  var still=matchMedia('(prefers-reduced-motion: reduce)').matches,spin=!still,quakes=[],ready=false;
+  var map;
+  try{map=new maplibregl.Map({container:'map',style:'https://tiles.openfreemap.org/styles/liberty',center:[55,25],zoom:1.5,attributionControl:{compact:true}})}
+  catch(e){say('Your browser could not start 3D maps.',false);return}
+  map.addControl(new maplibregl.NavigationControl({visualizePitch:true}),'top-right');
+  map.on('style.load',function(){try{map.setProjection({type:'globe'})}catch(e){}});
+  map.on('error',function(){if(!ready)say('The map tiles could not load. Check your internet connection.',true)});
+
+  var ago=function(ms){var m=Math.max(0,Math.round((Date.now()-ms)/60000));return m<60?m+' min ago':m<2880?Math.round(m/60)+' h ago':Math.round(m/1440)+' days ago'};
+  var sync=function(){$('spin').textContent='Auto-rotate: '+(spin?'on':'off');$('spin').setAttribute('aria-pressed',spin)};
+  var geo=function(){return {type:'FeatureCollection',features:quakes.map(function(q,i){return {type:'Feature',geometry:{type:'Point',coordinates:[q.lon,q.lat]},properties:{i:i,m:q.m,d:q.d}}})}};
+
+  map.on('load',function(){
+    ready=true;$('msg').hidden=true;
+    map.addSource('eq',{type:'geojson',data:geo()});
+    map.addLayer({id:'eq',type:'circle',source:'eq',paint:{
+      'circle-radius':['interpolate',['linear'],['get','m'],2.5,4,6,12,8,26],
+      'circle-color':['step',['get','d'],'#FF8A4C',70,'#FFD23F',300,'#4DD8FF'],
+      'circle-opacity':.82,'circle-stroke-color':'#ffffff','circle-stroke-width':1}});
+    map.addLayer({id:'sel',type:'circle',source:'eq',filter:['==',['get','i'],-1],paint:{
+      'circle-radius':['+',['interpolate',['linear'],['get','m'],2.5,4,6,12,8,26],8],
+      'circle-color':'rgba(0,0,0,0)','circle-stroke-color':'#ffffff','circle-stroke-width':3}});
+    map.on('click','eq',function(e){pick(quakes[e.features[0].properties.i],false)});
+    map.on('mouseenter','eq',function(){map.getCanvas().style.cursor='pointer'});
+    map.on('mouseleave','eq',function(){map.getCanvas().style.cursor=''});
+    load('2.5_day');
+  });
+
+  var pick=function(q,fly){
+    map.setFilter('sel',['==',['get','i'],q.i]);
+    var s=$('sel');s.textContent='';
+    s.appendChild(E('p','M'+q.m.toFixed(1))).className='big';
+    s.appendChild(E('p',q.place));s.appendChild(E('p','Depth: '+Math.round(q.d)+' km'));
+    s.appendChild(E('p',new Date(q.t).toLocaleString()+' ('+ago(q.t)+')'));
+    if(q.url&&/^https:\/\/earthquake\.usgs\.gov\//.test(q.url)){var a=E('a','Details on USGS');a.href=q.url;a.target='_blank';a.rel='noopener';a.style.color='var(--acc)';s.appendChild(a)}
+    if(fly){spin=false;sync();map.flyTo({center:[q.lon,q.lat],zoom:Math.max(map.getZoom(),5),speed:.9})}
+  };
+  var load=function(f){
+    var ctl=window.AbortController?new AbortController():null,tm=setTimeout(function(){if(ctl)ctl.abort()},12000);
+    fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/'+f+'.geojson',ctl?{signal:ctl.signal}:{})
+      .then(function(r){if(!r.ok)throw 0;return r.json()})
+      .then(function(j){
+        clearTimeout(tm);
+        quakes=(j.features||[]).filter(function(x){return x.geometry&&x.properties&&typeof x.properties.mag==='number'}).map(function(x,i){
+          var c=x.geometry.coordinates,p=x.properties;
+          return {i:i,m:p.mag,place:p.place||'Unknown place',t:p.time,d:c[2]||0,lat:c[1],lon:c[0],url:p.url};
+        });
+        map.getSource('eq').setData(geo());map.setFilter('sel',['==',['get','i'],-1]);
+        var top=quakes.slice().sort(function(a,b){return b.m-a.m}),ul=$('list');
+        $('n1').textContent=quakes.length;$('n2').textContent=top.length?'M'+top[0].m.toFixed(1):'-';
+        $('upd').textContent='Updated '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+        ul.textContent='';
+        top.slice(0,8).forEach(function(q){var li=E('li'),b=E('button');b.type='button';b.appendChild(E('b','M'+q.m.toFixed(1)));b.appendChild(E('span',q.place));b.onclick=function(){pick(q,true)};li.appendChild(b);ul.appendChild(li)});
+        if(!top.length)ul.appendChild(E('li','No earthquakes in this range.'));
+      })
+      .catch(function(){clearTimeout(tm);say('Could not reach the USGS earthquake feed.',true)});
+  };
+  $('seg').addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b)return;
+    [].forEach.call($('seg').children,function(x){x.setAttribute('aria-pressed',x===b)});
+    $('msg').hidden=true;load(b.dataset.f);
+  });
+  $('retry').onclick=function(){if(!ready){location.reload();return}$('msg').hidden=true;load($('seg').querySelector('[aria-pressed="true"]').dataset.f)};
+  $('spin').onclick=function(){spin=!spin;sync()};
+  ['mousedown','touchstart','wheel'].forEach(function(ev){map.on(ev,function(){if(spin){spin=false;sync()}})});
+  sync();
+  (function tick(){
+    requestAnimationFrame(tick);
+    if(spin&&ready&&!document.hidden&&map.getZoom()<3.2){var c=map.getCenter();c.lng+=.12;map.jumpTo({center:c})}
+  })();
+})();
+</script>
+</body>
+</html>

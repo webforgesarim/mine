@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Encrypted message link | Joseph</title>
+<meta name="description" content="Lock a message with a password and share it as a link. Encryption happens in your browser and nothing is stored anywhere.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0A0F2A">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0F2A;--ink:#EEF1F7;--mute:#A3AECB;--line:rgba(255,255,255,.18);--acc:#FF7A45;--g:#7CFFB2;--bad:#FF8A80;
+  --display:'Bricolage Grotesque','Segoe UI',Arial,sans-serif;--body:'Public Sans','Segoe UI',Arial,sans-serif;--mono:ui-monospace,Menlo,Consolas,monospace;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg) radial-gradient(60% 40% at 80% 0%,rgba(255,122,69,.16),transparent 70%) no-repeat;color:var(--ink);font:1.0625rem/1.65 var(--body)}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px;border-radius:6px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:.9rem clamp(1rem,3vw,2rem);border-bottom:1px solid var(--line)}
+.top a{text-decoration:none;color:var(--mute);font-size:.92rem}
+.top .brand{font:800 1.2rem var(--display);color:var(--ink)}.brand span{color:var(--acc)}
+main{width:min(720px,100% - 2rem);margin:0 auto;padding:2.5rem 0 3rem}
+h1{font:800 clamp(2rem,6vw,3.2rem)/1.05 var(--display);letter-spacing:-.03em;margin:0 0 .6rem}
+.lead{color:var(--mute);margin:0 0 1.6rem}
+.card{border:1px solid var(--line);border-radius:20px;padding:1.4rem;background:rgba(255,255,255,.05);display:grid;gap:.9rem}
+label{font-size:.9rem;font-weight:600}
+textarea,input[type=password],input[type=text]{width:100%;background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:12px;padding:.8rem .9rem;font-size:1rem}
+textarea{min-height:150px;resize:vertical}
+textarea:focus,input:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px rgba(255,122,69,.25)}
+.row{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center}
+.pw{display:flex;gap:.5rem}.pw input{flex:1;min-width:0}
+.btn{padding:.7rem 1.3rem;border-radius:99px;border:2px solid var(--ink);background:none;cursor:pointer;font-weight:600;text-decoration:none;display:inline-block}
+.btn:hover{background:var(--ink);color:var(--bg)}
+.btn.p{background:var(--acc);border-color:var(--acc);color:#0A0F2A}.btn.p:hover{opacity:.9;background:var(--acc)}
+.btn:disabled{opacity:.5;cursor:wait}
+.mini{padding:.5rem .9rem;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.07);cursor:pointer}
+.note{font-size:.88rem;color:var(--mute);margin:0}
+.err{color:var(--bad);font-size:.92rem;margin:0;min-height:1.3em}
+.out{font:.85rem/1.5 var(--mono);word-break:break-all;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:12px;padding:.8rem;margin:0;user-select:all}
+.msg{white-space:pre-wrap;word-break:break-word;background:rgba(124,255,178,.08);border:1px solid var(--g);border-radius:14px;padding:1rem;margin:0}
+[hidden]{display:none!important}
+.how{margin-top:2rem;color:var(--mute);font-size:.95rem}.how li{margin:.4rem 0}.how b{color:var(--ink)}
+.toast{position:fixed;left:50%;bottom:1.5rem;transform:translate(-50%,160%);background:var(--ink);color:var(--bg);padding:.7rem 1.2rem;border-radius:10px;transition:transform .3s}
+.toast.show{transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+</style>
+<link rel="stylesheet" href="responsive.css">
+</head>
+<body>
+<header class="top"><a class="brand" href="index.html">Joseph<span>.</span></a><a href="index.html">Back to portfolio</a></header>
+<main>
+  <section id="make">
+    <h1>Send a locked message</h1>
+    <p class="lead">Write a message, choose a password, and get a link. Only someone with the link and the password can read it. Nothing is stored on any server.</p>
+    <div class="card">
+      <div><label for="txt">Message</label><textarea id="txt" maxlength="1200"></textarea><p class="note"><span id="cnt">0</span> / 1200 characters</p></div>
+      <div><label for="pw">Password</label>
+        <div class="pw"><input id="pw" type="password" autocomplete="new-password"><button class="mini" id="sh" type="button" aria-pressed="false">Show</button></div>
+        <p class="note" id="pn"></p></div>
+      <div class="row"><button class="btn p" id="go" type="button">Lock message</button></div>
+      <p class="err" id="e1" role="alert"></p>
+      <div id="res" hidden>
+        <label for="lk">Your link</label>
+        <p class="out" id="lk"></p>
+        <div class="row" style="margin-top:.7rem"><button class="btn" id="cp" type="button">Copy link</button></div>
+        <p class="note" style="margin-top:.7rem">Send the password by a different route, for example the link on WhatsApp and the password by phone.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="open" hidden>
+    <h1>You received a locked message</h1>
+    <p class="lead">Enter the password you were given to read it. Decryption happens in your browser.</p>
+    <div class="card">
+      <div><label for="pw2">Password</label>
+        <div class="pw"><input id="pw2" type="password" autocomplete="current-password"><button class="mini" id="sh2" type="button" aria-pressed="false">Show</button></div></div>
+      <div class="row"><button class="btn p" id="un" type="button">Unlock</button></div>
+      <p class="err" id="e2" role="alert"></p>
+      <div id="shown" hidden><label>Message</label><p class="msg" id="pt"></p></div>
+    </div>
+    <p class="note" style="margin-top:1rem"><a href="secure.html" style="color:var(--acc)">Create your own locked message</a></p>
+  </section>
+
+  <ul class="how">
+    <li><b>Where the message lives:</b> inside the link itself, after the # sign. Browsers never send that part to a server.</li>
+    <li><b>How it is locked:</b> AES-256-GCM, with a key made from your password using PBKDF2 (600,000 rounds).</li>
+    <li><b>Limits:</b> anyone with the link can try to guess the password, so use a long one. A link cannot expire or be taken back, and the message is not hidden from whoever has both the link and the password.</li>
+  </ul>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)};
+  var enc=new TextEncoder(),dec=new TextDecoder(),RND=600000;
+  var toast=function(m){var t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.h);toast.h=setTimeout(function(){t.classList.remove('show')},2000)};
+  var b64=function(u){var s='';for(var i=0;i<u.length;i++)s+=String.fromCharCode(u[i]);return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')};
+  var unb=function(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';var r=atob(s),u=new Uint8Array(r.length);for(var i=0;i<r.length;i++)u[i]=r.charCodeAt(i);return u};
+  var base=function(){return location.href.split('#')[0]};
+
+  if(!window.crypto||!crypto.subtle){
+    $('make').hidden=false;$('e1').textContent='This page needs a secure connection (https or localhost) to encrypt.';$('go').disabled=true;return;
+  }
+  var derive=function(pw,salt){
+    return crypto.subtle.importKey('raw',enc.encode(pw),'PBKDF2',false,['deriveKey']).then(function(m){
+      return crypto.subtle.deriveKey({name:'PBKDF2',salt:salt,iterations:RND,hash:'SHA-256'},m,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);
+    });
+  };
+  var eye=function(b,i){b.addEventListener('click',function(){var s=i.type==='password';i.type=s?'text':'password';b.textContent=s?'Hide':'Show';b.setAttribute('aria-pressed',s)})};
+  eye($('sh'),$('pw'));eye($('sh2'),$('pw2'));
+
+  $('txt').addEventListener('input',function(){$('cnt').textContent=$('txt').value.length});
+  $('pw').addEventListener('input',function(){
+    var n=$('pw').value.length;
+    $('pn').textContent=!n?'':n<10?'Short. Use at least 12 characters, or four or more random words.':n<14?'Fair. A longer password is safer.':'Good length.';
+  });
+
+  $('go').addEventListener('click',function(){
+    var t=$('txt').value,p=$('pw').value;$('e1').textContent='';
+    if(!t.trim()){$('e1').textContent='Please write a message first.';$('txt').focus();return}
+    if(p.length<8){$('e1').textContent='Please use a password of at least 8 characters.';$('pw').focus();return}
+    $('go').disabled=true;$('go').textContent='Locking...';
+    var salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12));
+    derive(p,salt).then(function(k){return crypto.subtle.encrypt({name:'AES-GCM',iv:iv},k,enc.encode(t))}).then(function(ct){
+      $('lk').textContent=base()+'#v1.'+b64(salt)+'.'+b64(iv)+'.'+b64(new Uint8Array(ct));
+      $('res').hidden=false;
+    }).catch(function(){$('e1').textContent='Could not lock the message. Please try again.'}).then(function(){$('go').disabled=false;$('go').textContent='Lock message'});
+  });
+  $('cp').addEventListener('click',function(){
+    var v=$('lk').textContent;
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(function(){toast('Link copied')},function(){toast('Select the link and copy it')});
+    else toast('Select the link and copy it');
+  });
+
+  var parts=null;
+  var route=function(){
+    var h=location.hash.slice(1);
+    parts=null;
+    if(h.indexOf('v1.')===0){var a=h.split('.');if(a.length===4)parts=a}
+    $('open').hidden=!parts;$('make').hidden=!!parts;
+    $('shown').hidden=true;$('pt').textContent='';$('e2').textContent='';
+  };
+  addEventListener('hashchange',route);route();
+
+  var unlock=function(){
+    if(!parts)return;
+    var p=$('pw2').value;$('e2').textContent='';
+    if(!p){$('e2').textContent='Please enter the password.';$('pw2').focus();return}
+    $('un').disabled=true;$('un').textContent='Unlocking...';
+    var salt,iv,ct;
+    try{salt=unb(parts[1]);iv=unb(parts[2]);ct=unb(parts[3])}catch(e){$('e2').textContent='This link looks damaged.';$('un').disabled=false;$('un').textContent='Unlock';return}
+    derive(p,salt).then(function(k){return crypto.subtle.decrypt({name:'AES-GCM',iv:iv},k,ct)}).then(function(pt){
+      $('pt').textContent=dec.decode(pt);$('shown').hidden=false;
+    }).catch(function(){$('e2').textContent='Wrong password, or the link was changed.'}).then(function(){$('un').disabled=false;$('un').textContent='Unlock'});
+  };
+  $('un').addEventListener('click',unlock);
+  $('pw2').addEventListener('keydown',function(e){if(e.key==='Enter')unlock()});
+})();
+</script>
+<script src="code-rain.js" defer></script>
+</body>
+</html>

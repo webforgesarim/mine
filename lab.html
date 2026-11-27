@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Joseph Lab | Technical Projects and Tools</title>
+<meta name="description" content="Explore Joseph's technical lab, security checklist, terminal, estimator and coding puzzles.">
+<meta name="theme-color" content="#0B1023">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Joseph – Web developer at webforgestudio">
+<meta property="og:description" content="Fast, secure websites and web apps, built and launched by one person.">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2722%27 fill=%27%23E8480C%27/%3E%3Ctext x=%2750%27 y=%2272%27 font-size=%2270%27 font-weight=%27800%27 text-anchor=%27middle%27 fill=%27white%27 font-family=%27Arial%27%3ES%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="responsive.css">
+</head>
+<body>
+
+<div class="bar" id="bar"></div>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html">Joseph<span>.</span></a>
+    <nav id="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="index.html#work">Work</a>
+      <a href="index.html#services">Services</a>
+      <a href="#lab">Lab</a>
+      <a href="index.html#plans">Plans</a>
+      <a href="tools.html">Tools</a>
+      <a href="index.html#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="index.html#experience">Experience</a>
+      <a href="#contact">Contact</a>
+      <button class="tbtn" id="lang" type="button" lang="ur" aria-label="Switch language to Urdu">اردو</button>
+      <button class="tbtn" id="theme" type="button" aria-label="Switch colour theme">Theme</button>
+      <button class="tbtn burger" id="burger" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+<section class="lab-title"><div class="wrap"><h1>Lab</h1><p>Technical projects, tools and experiments.</p></div></section>
+
+
+
+
+
+
+
+
+
+
+<section class="lab" id="lab">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="winSymbol" viewBox="0 0 120 90"><rect x="6" y="8" width="108" height="74" rx="9" fill="rgba(255,255,255,.06)" stroke="#7280FF" stroke-width="2"/><circle cx="18" cy="19" r="3" fill="#FF6B6B"/><circle cx="28" cy="19" r="3" fill="#FFD23F"/><circle cx="38" cy="19" r="3" fill="#7CFFB2"/></symbol></svg>
+  <div class="bubbles" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="head">
+      <h2>Tech lab</h2>
+      <p>The technical side behind the websites. Tap any card to flip it and see how I use it.</p>
+    </div>
+    <div class="demo" role="img" aria-label="Animated demo: a Linux terminal and a Python script running">
+      <div class="tw">
+        <div class="tbar"><i></i><i></i><i></i><span>bash</span></div>
+        <pre class="tbody" id="t1"></pre>
+      </div>
+      <div class="tw">
+        <div class="tbar"><i></i><i></i><i></i><span>python</span></div>
+        <pre class="tbody" id="t2"></pre>
+      </div>
+    </div>
+    <div class="cards">
+      <button class="flip" type="button" aria-pressed="false"><span class="in">
+        <span class="face"><svg viewBox="0 0 120 90" aria-hidden="true"><use href="#winSymbol"/><text x="16" y="45" fill="#5CE1E6" font-family="monospace" font-size="11">&gt;&gt;&gt; hello()</text><text x="16" y="63" fill="#7CFFB2" font-family="monospace" font-size="11">Hello, world</text></svg><h3>Python</h3><p>Scripts that do the boring work for you.</p><span class="hint">Tap to flip</span></span>
+        <span class="face back"><h3>What I do</h3><p>Automation, data cleaning, small APIs and bots, so repeated tasks run on their own.</p><span class="chips"><b>Automation</b><b>Flask</b><b>Pandas</b><b>APIs</b></span></span>
+      </span></button>
+      <button class="flip" type="button" aria-pressed="false"><span class="in">
+        <span class="face"><svg viewBox="0 0 120 90" aria-hidden="true"><use href="#winSymbol"/><text x="16" y="45" fill="#7CFFB2" font-family="monospace" font-size="11">$ sudo apt update</text><text x="16" y="63" fill="#5CE1E6" font-family="monospace" font-size="11">$ ls -la</text></svg><h3>Linux</h3><p>Servers and tools, run from the command line.</p><span class="hint">Tap to flip</span></span>
+        <span class="face back"><h3>What I do</h3><p>I develop on Linux and set up, secure and maintain Ubuntu and Debian servers over SSH.</p><span class="chips"><b>Ubuntu</b><b>Bash</b><b>SSH</b><b>Nginx</b></span></span>
+      </span></button>
+      <button class="flip" type="button" aria-pressed="false"><span class="in">
+        <span class="face"><svg viewBox="0 0 120 90" aria-hidden="true"><path d="M60 6 100 20v26c0 20-18 34-40 40C38 80 20 66 20 46V20Z" fill="rgba(124,255,178,.08)" stroke="#7CFFB2" stroke-width="3" stroke-linejoin="round"/><circle cx="60" cy="38" r="9" fill="none" stroke="#5CE1E6" stroke-width="3"/><path d="M60 47v16" stroke="#5CE1E6" stroke-width="3" stroke-linecap="round"/></svg><h3>Ethical hacking</h3><p>Finding weak spots before attackers do.</p><span class="hint">Tap to flip</span></span>
+        <span class="face back"><h3>What I do</h3><p>I practise security the legal way: labs, capture-the-flag games, and testing only what I have permission to test. Findings turn into fixes.</p><span class="chips"><b>OWASP Top 10</b><b>Kali</b><b>Nmap</b><b>Burp Suite</b></span></span>
+      </span></button>
+      <button class="flip" type="button" aria-pressed="false"><span class="in">
+        <span class="face"><svg viewBox="0 0 120 90" aria-hidden="true"><g stroke="#7280FF" stroke-width="2.5"><path d="M60 45 22 20M60 45 98 20M60 45 22 72M60 45 98 72"/></g><g fill="#0A0F2A" stroke-width="3"><circle cx="22" cy="20" r="8" stroke="#5CE1E6"/><circle cx="98" cy="20" r="8" stroke="#5CE1E6"/><circle cx="22" cy="72" r="8" stroke="#5CE1E6"/><circle cx="98" cy="72" r="8" stroke="#5CE1E6"/><circle cx="60" cy="45" r="12" stroke="#7CFFB2"/></g></svg><h3>Networking</h3><p>How data travels from server to screen.</p><span class="hint">Tap to flip</span></span>
+        <span class="face back"><h3>What I do</h3><p>DNS, HTTPS, ports and firewalls. Useful when a site is slow, unreachable or not secure.</p><span class="chips"><b>TCP/IP</b><b>DNS</b><b>HTTPS</b><b>Firewalls</b></span></span>
+      </span></button>
+      <button class="flip" type="button" aria-pressed="false"><span class="in">
+        <span class="face"><svg viewBox="0 0 120 90" aria-hidden="true"><use href="#winSymbol"/><text x="60" y="62" text-anchor="middle" fill="#FFD23F" font-family="monospace" font-weight="700" font-size="30">{ }</text></svg><h3>JavaScript</h3><p>The language of the browser and the server.</p><span class="hint">Tap to flip</span></span>
+        <span class="face back"><h3>What I do</h3><p>Interactive pages in the browser and fast back ends with Node.js.</p><span class="chips"><b>ES6+</b><b>Node.js</b><b>React</b><b>REST</b></span></span>
+      </span></button>
+      <button class="flip" type="button" aria-pressed="false"><span class="in">
+        <span class="face"><svg viewBox="0 0 120 90" aria-hidden="true"><path d="M30 14v62M30 40c0-14 60-4 60-22" fill="none" stroke="#7280FF" stroke-width="3"/><g fill="#0A0F2A" stroke-width="3"><circle cx="30" cy="14" r="8" stroke="#5CE1E6"/><circle cx="30" cy="76" r="8" stroke="#5CE1E6"/><circle cx="90" cy="18" r="8" stroke="#7CFFB2"/></g></svg><h3>Git</h3><p>Every change tracked, every release reversible.</p><span class="hint">Tap to flip</span></span>
+        <span class="face back"><h3>What I do</h3><p>You can see exactly what changed and when, and roll back safely if something breaks.</p><span class="chips"><b>GitHub</b><b>Branches</b><b>Pull requests</b><b>CI</b></span></span>
+      </span></button>
+    </div>
+  </div>
+</section>
+
+<section class="tsec" id="terminal">
+  <div class="wrap">
+    <div class="head">
+      <h2>Terminal</h2>
+      <p>A working command line. Type help, or tap a command below. Try goto contact when you are ready to talk.</p>
+    </div>
+    <div class="tw">
+      <div class="tbar"><i></i><i></i><i></i><span>visitor@Joseph: ~</span></div>
+      <div class="tbox" id="tbox">
+        <div id="tout" role="log" aria-live="polite"></div>
+        <label class="tline"><span class="g">visitor@Joseph:~$</span><input id="tin" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" aria-label="Terminal command"></label>
+      </div>
+    </div>
+    <div class="tchips">
+      <button type="button" data-c="help">help</button>
+      <button type="button" data-c="about">about</button>
+      <button type="button" data-c="skills">skills</button>
+      <button type="button" data-c="projects">projects</button>
+      <button type="button" data-c="contact">contact</button>
+      <button type="button" data-c="ls">ls</button>
+      <button type="button" data-c="theme">theme</button>
+      <button type="button" data-c="clear">clear</button>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="security">
+  <div class="wrap">
+    <div class="head">
+      <h2>Is your website secure?</h2>
+      <p>A quick self-check, not a full audit. Tick what is true for your site today. Nothing is saved or sent anywhere.</p>
+    </div>
+    <div class="grid">
+      <ul class="chk" id="chk">
+        <li><label><input type="checkbox"><span class="tx"><b>The site loads over HTTPS</b><span>Look for the padlock next to the address in your browser.</span></span></label></li>
+        <li><label><input type="checkbox"><span class="tx"><b>Strong, unique passwords</b><span>Admin, hosting and domain logins each have their own long password.</span></span></label></li>
+        <li><label><input type="checkbox"><span class="tx"><b>Two-step login is switched on</b><span>A code on your phone is needed for admin, hosting and email.</span></span></label></li>
+        <li><label><input type="checkbox"><span class="tx"><b>Software is kept up to date</b><span>The platform, plugins and themes get updates, not left for years.</span></span></label></li>
+        <li><label><input type="checkbox"><span class="tx"><b>Backups run automatically</b><span>You have a recent copy stored away from the server itself.</span></span></label></li>
+        <li><label><input type="checkbox"><span class="tx"><b>Forms are checked and spam-protected</b><span>Contact and login forms reject bad input and bots.</span></span></label></li>
+        <li><label><input type="checkbox"><span class="tx"><b>Admin access is limited</b><span>Only people who need it have it, and old accounts are removed.</span></span></label></li>
+        <li><label><input type="checkbox"><span class="tx"><b>You get an alert if the site goes down</b><span>Something tells you before your customers do.</span></span></label></li>
+      </ul>
+      <aside class="score">
+        <div class="num"><span id="sn">0</span><small> / 8</small></div>
+        <div class="meter" id="sm" role="progressbar" aria-label="Security score" aria-valuemin="0" aria-valuemax="8" aria-valuenow="0"><i id="sb"></i></div>
+        <div aria-live="polite">
+          <h3 id="st">Tick what applies</h3>
+          <p id="sx">Your result appears here as you go.</p>
+        </div>
+        <a class="btn" href="#contact">Ask for a free check</a>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="head">
+      <h2>Toolbox</h2>
+      <p>What I reach for most often, and what I am comfortable shipping to real users.</p>
+    </div>
+    <div class="skills">
+      <div><h3>Front end</h3><ul><li>HTML and CSS</li><li>JavaScript</li><li>React</li><li>Responsive layout</li></ul></div>
+      <div><h3>Back end</h3><ul><li>Node.js</li><li>Express</li><li>REST APIs</li><li>Authentication</li></ul></div>
+      <div><h3>Data</h3><ul><li>PostgreSQL</li><li>MongoDB</li><li>IndexedDB</li><li>Backups</li></ul></div>
+      <div><h3>Delivery</h3><ul><li>Git and GitHub</li><li>Deployment</li><li>Performance tuning</li><li>Accessibility</li></ul></div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<section id="estimate">
+  <div class="wrap">
+    <div class="head">
+      <h2>Estimate your project</h2>
+      <p>Choose what you need and see a rough price and timeline. Nothing is sent until you press the button.</p>
+    </div>
+    <div class="egrid">
+      <div class="opts">
+        <fieldset class="pick">
+          <legend>1. What do you need?</legend>
+          <label><input type="radio" name="etype" value="launch" checked><span><b>Launch page</b><small>One-page site for a person or small business</small></span></label>
+          <label><input type="radio" name="etype" value="business"><span><b>Business site</b><small>Several pages, built to bring in customers</small></span></label>
+          <label><input type="radio" name="etype" value="app"><span><b>Web app</b><small>Booking, shop, dashboard or custom tool</small></span></label>
+          <label><input type="radio" name="etype" value="fix"><span><b>Fix or rebuild</b><small>Slow, broken or outdated site</small></span></label>
+        </fieldset>
+        <fieldset>
+          <legend>2. How many pages? <output id="epv">3</output></legend>
+          <input id="epages" type="range" min="1" max="20" value="3" aria-label="Number of pages">
+        </fieldset>
+        <fieldset class="ex">
+          <legend>3. Extras</legend>
+          <label><input type="checkbox" value="login"><span>User accounts and login</span></label>
+          <label><input type="checkbox" value="pay"><span>Online payments</span></label>
+          <label><input type="checkbox" value="admin"><span>Admin dashboard</span></label>
+          <label><input type="checkbox" value="lang"><span>Urdu and English versions</span></label>
+          <label><input type="checkbox" value="seo"><span>Search engine setup</span></label>
+          <label><input type="checkbox" value="copy"><span>Writing the page text</span></label>
+          <label><input type="checkbox" value="care"><span>3 months of support</span></label>
+        </fieldset>
+        <fieldset class="pick">
+          <legend>4. Timeline</legend>
+          <label><input type="radio" name="etime" value="normal" checked><span><b>Normal</b><small>Standard delivery</small></span></label>
+          <label><input type="radio" name="etime" value="fast"><span><b>Fast</b><small>Quicker delivery, +25%</small></span></label>
+        </fieldset>
+      </div>
+      <aside class="quote">
+        <h3>Rough estimate</h3>
+        <div class="amt" id="eamt" aria-live="polite"></div>
+        <p class="tm" id="etm"></p>
+        <ul id="elist"></ul>
+        <p class="fine">This is a rough guide, not a quote. The final price is fixed after a free call.</p>
+        <button class="btn" id="esend" type="button">Send this to my enquiry</button>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section id="process">
+  <div class="wrap">
+    <div class="head">
+      <h2>How a project runs</h2>
+      <p>The same four steps every time, so you always know what comes next.</p>
+    </div>
+    <ol class="steps">
+      <li><h3>Talk</h3><p>We agree on the goal, the budget and the deadline before anything is built.</p></li>
+      <li><h3>Plan</h3><p>You get a page-by-page outline and a fixed price to approve.</p></li>
+      <li><h3>Build</h3><p>You see a working version every week and can change direction early.</p></li>
+      <li><h3>Launch</h3><p>I deploy it, test it on real phones, and stay on call for the first month.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="tsec" id="ctf">
+  <div class="wrap">
+    <div class="head">
+      <h2>Can you crack it?</h2>
+      <p>Three short puzzles. Decode each message, type the answer, and unlock something hidden in this site. Hints are allowed.</p>
+    </div>
+    <div class="ctf" id="ctfs"></div>
+    <div class="win" id="win" hidden>
+      <h3>Access granted</h3>
+      <p>You think like a tester, and that is exactly how I build things. The whole site has switched to hacker mode.</p>
+      <div class="crow">
+        <button class="btn fill" id="wmsg" type="button">Tell me you solved it</button>
+        <button class="btn" id="wreset" type="button">Back to normal</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="head">
+      <h2>Questions people ask</h2>
+      <p>Short answers to the things most clients want to know before we start.</p>
+    </div>
+    <div class="faq">
+      <details>
+        <summary>How long does a project take?</summary>
+        <p>A launch page takes about a week, a business site about three weeks, and a web app six to ten weeks. The estimator above gives a timeline for your exact choices.</p>
+      </details>
+      <details>
+        <summary>How does payment work?</summary>
+        <p>Half to start the work and half when the site goes live. Larger apps can be split into milestones. Everything is agreed in writing before I begin.</p>
+      </details>
+      <details>
+        <summary>What do I need to give you?</summary>
+        <p>Your logo and brand colours if you have them, the text and photos you want on the site, and a few websites you like. If you do not have the text yet, I can write it for you as an extra.</p>
+      </details>
+      <details>
+        <summary>Will it work on phones?</summary>
+        <p>Yes. Every page is designed on a phone screen first and then scaled up to tablets and computers.</p>
+      </details>
+      <details>
+        <summary>Do you offer support after launch?</summary>
+        <p>Business sites include one month of support. For any other project you can add three months of support in the estimator. After that, fixes and changes are quoted as small separate jobs.</p>
+      </details>
+      <details>
+        <summary>Who owns the website?</summary>
+        <p>You do. The code, design and content are handed over to you once the final payment is made.</p>
+      </details>
+      <details>
+        <summary>Can you fix a site someone else built?</summary>
+        <p>Usually, yes. I start with a short review of what is slow, broken or insecure, and then give you a fixed price to repair it.</p>
+      </details>
+      <details>
+        <summary>What happens to the details I send?</summary>
+        <p>The contact form does not store anything. It opens WhatsApp or your email app with the message ready, so what you write goes only to me.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<button class="popen" id="popen" type="button" aria-label="Open search and shortcuts">Search <kbd>Ctrl K</kbd></button>
+<dialog class="pal" id="pal" aria-label="Search and shortcuts">
+  <input id="pin" type="text" placeholder="Jump to a section, page or action" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="true" aria-controls="plist" aria-label="Search">
+  <ul id="plist" role="listbox"></ul>
+  <div class="foot">Arrow keys to move, Enter to open, Esc to close</div>
+</dialog>
+
+<section class="contact" id="contact">
+  <div class="wrap cgrid">
+    <div>
+      <h2>Have something to build?</h2>
+      <p class="note">Tell me what you need. I reply within a day, usually sooner.</p>
+      <a class="mail" id="mail" href="mailto:hello@webforgestudio.com">hello@webforgestudio.com</a>
+      <div class="btns">
+        <button class="btn" id="copy" type="button">Copy address</button>
+      </div>
+      <div class="social">
+        <a href="https://www.instagram.com/iixu3h" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.facebook.com/Josephkhorr.1" target="_blank" rel="noopener">Facebook</a>
+         <a href="resume.html">Resume</a>
+               <a href="xray.html">Privacy X-Ray</a>
+               <a href="defense.html">Defence game</a>
+               <a href="blog.html">Security notes</a>
+      </div>
+    </div>
+
+    <form class="cform" id="cform" novalidate aria-label="Project enquiry">
+      <h3>Tell me about your project</h3>
+      <div class="fld">
+        <label for="cname">Your name</label>
+        <input id="cname" type="text" autocomplete="name" aria-describedby="cname-err">
+        <p class="err" id="cname-err" aria-live="polite"></p>
+      </div>
+      <div class="fld">
+        <label for="cemail">Email (optional)</label>
+        <input id="cemail" type="email" autocomplete="email" aria-describedby="cemail-err">
+        <p class="err" id="cemail-err" aria-live="polite"></p>
+      </div>
+      <div class="fld">
+        <label for="ctype">What do you need?</label>
+        <select id="ctype">
+          <option>Launch page</option>
+          <option>Business site</option>
+          <option>Web app</option>
+          <option>Fix or rebuild</option>
+          <option>Something else</option>
+        </select>
+      </div>
+      <div class="fld">
+        <label for="cmsg">Message</label>
+        <textarea id="cmsg" aria-describedby="cmsg-err"></textarea>
+        <p class="err" id="cmsg-err" aria-live="polite"></p>
+      </div>
+      <div class="btns">
+        <button class="btn fill" id="cwa" type="button">Send on WhatsApp</button>
+        <button class="btn" id="cmail" type="button">Send by email</button>
+      </div>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; <span id="yr">2026</span> webforgestudio Pvt. Ltd. All rights reserved.</span>
+        <span class="sw" role="group" aria-label="Accent colour">
+      <button type="button" data-a="orange" aria-label="Orange" aria-pressed="true" style="--c:#FF6A2B"></button>
+      <button type="button" data-a="cyan" aria-label="Cyan" aria-pressed="false" style="--c:#1FB8E0"></button>
+      <button type="button" data-a="green" aria-label="Green" aria-pressed="false" style="--c:#22C55E"></button>
+      <button type="button" data-a="purple" aria-label="Purple" aria-pressed="false" style="--c:#8B5CF6"></button>
+      <button type="button" data-a="pink" aria-label="Pink" aria-pressed="false" style="--c:#EC4899"></button>
+    </span>
+    <a href="#top">Back to top</a>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite">Email address copied</div>
+
+<script src="script.js" defer></script>
+</body>
+</html>

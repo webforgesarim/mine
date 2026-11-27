@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Private file tools | Joseph</title>
+<meta name="description" content="Compress and convert images, merge PDFs and extract PDF pages. Your files never leave your device.">
+<meta name="theme-color" content="#0A0F2A">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0F2A;--ink:#EEF1F7;--mute:#A3AECB;--line:rgba(255,255,255,.18);--acc:#FF7A45;--g:#7CFFB2;--bad:#FF8A80;
+  --display:'Bricolage Grotesque','Segoe UI',Arial,sans-serif;--body:'Public Sans','Segoe UI',Arial,sans-serif;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg) radial-gradient(60% 40% at 80% 0%,rgba(255,122,69,.16),transparent 70%) no-repeat;color:var(--ink);font:1.0625rem/1.6 var(--body)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px;border-radius:6px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:.9rem clamp(1rem,3vw,2rem);border-bottom:1px solid var(--line)}
+.top a{text-decoration:none;color:var(--mute);font-size:.92rem}
+.top .brand{font:800 1.2rem var(--display);color:var(--ink)}.brand span{color:var(--acc)}
+main{width:min(820px,100% - 2rem);margin:0 auto;padding:2.5rem 0 3rem}
+h1{font:800 clamp(2rem,6vw,3.4rem)/1.05 var(--display);letter-spacing:-.03em;margin:0 0 .6rem}
+.lead,.note{color:var(--mute)}.lead{margin:0 0 1.4rem}.note{font-size:.88rem;margin:.5rem 0 0}
+.tabs{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem}
+.tabs button{padding:.55rem 1rem;border:1px solid var(--line);border-radius:99px;background:rgba(255,255,255,.06);cursor:pointer;font-weight:600}
+.tabs button[aria-selected="true"]{background:var(--acc);border-color:var(--acc);color:#0A0F2A}
+.card{border:1px solid var(--line);border-radius:20px;padding:1.3rem;background:rgba(255,255,255,.05);display:grid;gap:.9rem}
+label{font-size:.85rem;font-weight:600;color:var(--mute)}
+input[type=file],input[type=text],input[type=number],select{width:100%;background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:12px;padding:.7rem .85rem}
+select option{color:#0A0F2A;background:#fff}
+input[type=range]{width:100%;accent-color:#FF7A45}
+input:focus,select:focus{outline:none;border-color:var(--acc)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+.fld{display:grid;gap:.3rem;min-width:0}
+.btn{padding:.65rem 1.2rem;border-radius:99px;border:2px solid var(--ink);background:none;cursor:pointer;font-weight:600}
+.btn:hover{background:var(--ink);color:var(--bg)}
+.btn.p{background:var(--acc);border-color:var(--acc);color:#0A0F2A}.btn.p:hover{opacity:.9;background:var(--acc)}
+.btn:disabled{opacity:.5;cursor:wait}
+.mini{padding:.35rem .7rem;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.07);cursor:pointer;font-size:.9rem}
+.mini:hover{border-color:var(--acc)}
+.list{list-style:none;margin:0;padding:0;display:grid;gap:.5rem}
+.list li{display:flex;flex-wrap:wrap;gap:.5rem .8rem;align-items:center;justify-content:space-between;padding:.6rem .8rem;border:1px solid var(--line);border-radius:12px;background:rgba(0,0,0,.2)}
+.list .nm{flex:1;min-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.list small{color:var(--mute)}.list .ok{color:var(--g)}.list .bad{color:var(--bad)}
+.err{color:var(--bad);min-height:1.3em;margin:0;font-size:.92rem}
+.st{margin:0;color:var(--g);min-height:1.3em}
+[hidden]{display:none!important}
+@media (max-width:600px){.g2{grid-template-columns:1fr}}
+</style>
+<link rel="stylesheet" href="responsive.css">
+</head>
+<body>
+<header class="top"><a class="brand" href="index.html">Joseph<span>.</span></a><a href="index.html">Back to portfolio</a></header>
+<main>
+  <h1>Private file tools</h1>
+  <p class="lead">Compress images, merge PDFs and pull pages out of a PDF. Everything happens inside your browser, so your files are never uploaded anywhere.</p>
+  <div class="tabs" role="tablist" aria-label="Tools">
+    <button type="button" role="tab" data-p="p1" aria-selected="true">Images</button>
+    <button type="button" role="tab" data-p="p2" aria-selected="false">Merge PDFs</button>
+    <button type="button" role="tab" data-p="p3" aria-selected="false">Extract PDF pages</button>
+  </div>
+
+  <section class="card" id="p1" role="tabpanel">
+    <div class="fld"><label for="imgIn">Images (up to 20, each under 25 MB)</label><input id="imgIn" type="file" accept="image/*" multiple></div>
+    <div class="g2">
+      <div class="fld"><label for="fmt">Save as</label><select id="fmt"><option value="image/jpeg">JPG</option><option value="image/webp">WebP</option><option value="image/png">PNG</option></select></div>
+      <div class="fld"><label for="mw">Maximum width in pixels (optional)</label><input id="mw" type="number" min="16" max="8000" placeholder="For example 1600"></div>
+    </div>
+    <div class="fld"><label for="q">Quality: <span id="qv">80</span>%</label><input id="q" type="range" min="30" max="100" value="80"><p class="note">Quality does not apply to PNG. Saving removes photo metadata such as location.</p></div>
+    <div><button class="btn p" id="imgRun" type="button">Process images</button></div>
+    <p class="err" id="e1" role="alert"></p>
+    <ul class="list" id="imgOut"></ul>
+  </section>
+
+  <section class="card" id="p2" role="tabpanel" hidden>
+    <div class="fld"><label for="mIn">PDF files to merge</label><input id="mIn" type="file" accept="application/pdf" multiple></div>
+    <ul class="list" id="mList"></ul>
+    <div><button class="btn p" id="mRun" type="button">Merge and download</button></div>
+    <p class="err" id="e2" role="alert"></p><p class="st" id="s2" role="status"></p>
+  </section>
+
+  <section class="card" id="p3" role="tabpanel" hidden>
+    <div class="fld"><label for="sIn">PDF file</label><input id="sIn" type="file" accept="application/pdf"><p class="note" id="sInfo"></p></div>
+    <div class="fld"><label for="rg">Pages to keep</label><input id="rg" type="text" placeholder="For example 1-3, 5, 8-" autocomplete="off"></div>
+    <div><button class="btn p" id="sRun" type="button">Extract and download</button></div>
+    <p class="err" id="e3" role="alert"></p><p class="st" id="s3" role="status"></p>
+  </section>
+  <p class="note">Tip: open your browser’s Network tab (F12) while you use these tools. You will see that no file is sent anywhere.</p>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)};
+  var E=function(t,x){var e=document.createElement(t);if(x!==undefined)e.textContent=x;return e};
+  var sz=function(n){return n<1024?n+' B':n<1048576?(n/1024).toFixed(1)+' KB':(n/1048576).toFixed(2)+' MB'};
+  var save=function(b,name){var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},5000)};
+  var stem=function(n){return n.replace(/\.[^.]+$/,'')};
+
+  /* tabs */
+  var tabs=document.querySelectorAll('.tabs button');
+  tabs.forEach(function(b){b.addEventListener('click',function(){
+    tabs.forEach(function(x){x.setAttribute('aria-selected',x===b);$(x.dataset.p).hidden=x!==b});
+  })});
+
+  /* images */
+  $('q').addEventListener('input',function(){$('qv').textContent=$('q').value});
+  var urls=[];
+  $('imgRun').addEventListener('click',async function(){
+    var fs=[].slice.call($('imgIn').files).slice(0,20),out=$('imgOut');
+    $('e1').textContent='';
+    if(!fs.length){$('e1').textContent='Please choose at least one image.';return}
+    urls.forEach(function(u){URL.revokeObjectURL(u)});urls=[];out.textContent='';
+    var type=$('fmt').value,q=+$('q').value/100,mw=+$('mw').value||0,ext={'image/jpeg':'jpg','image/webp':'webp','image/png':'png'}[type];
+    $('imgRun').disabled=true;
+    for(var i=0;i<fs.length;i++){
+      var f=fs[i],li=E('li'),nm=E('span',f.name),info=E('small');
+      nm.className='nm';li.appendChild(nm);li.appendChild(info);out.appendChild(li);
+      try{
+        if(f.size>25e6)throw new Error('over 25 MB');
+        var bm=await createImageBitmap(f);
+        var sc=mw&&bm.width>mw?mw/bm.width:1,w=Math.max(1,Math.round(bm.width*sc)),h=Math.max(1,Math.round(bm.height*sc));
+        var c=document.createElement('canvas');c.width=w;c.height=h;
+        var x=c.getContext('2d');
+        if(type==='image/jpeg'){x.fillStyle='#fff';x.fillRect(0,0,w,h)}
+        x.drawImage(bm,0,0,w,h);if(bm.close)bm.close();
+        var blob=await new Promise(function(r){c.toBlob(r,type,q)});
+        if(!blob||blob.type!==type)throw new Error('this browser cannot save that format');
+        var pct=Math.round((1-blob.size/f.size)*100);
+        info.textContent=sz(f.size)+' \u2192 '+sz(blob.size)+' ('+(pct>=0?'-'+pct:'+'+(-pct))+'%)';
+        info.className=pct>=0?'ok':'';
+        var b=E('button','Download');b.type='button';b.className='mini';
+        (function(bl,n){b.addEventListener('click',function(){save(bl,n)})})(blob,stem(f.name)+'.'+ext);
+        li.appendChild(b);
+      }catch(e){info.textContent='Could not process: '+(e.message||'unsupported file');info.className='bad'}
+    }
+    $('imgRun').disabled=false;
+  });
+
+  /* pdf helpers */
+  var lib=function(){if(window.PDFLib)return window.PDFLib;throw new Error('The PDF library could not load. Check your internet connection.')};
+  var load=async function(f){
+    if(f.size>50e6)throw new Error(f.name+' is over 50 MB.');
+    try{return await lib().PDFDocument.load(await f.arrayBuffer())}
+    catch(e){if(/PDF library/.test(e.message))throw e;throw new Error(f.name+' could not be read. It may be protected by a password or damaged.')}
+  };
+
+  /* merge */
+  var files=[];
+  var draw=function(){
+    var ul=$('mList');ul.textContent='';
+    files.forEach(function(f,i){
+      var li=E('li'),n=E('span',(i+1)+'. '+f.name),s=E('small',sz(f.size)),r=E('span');
+      n.className='nm';
+      [['\u2191',-1],['\u2193',1],['\u00D7',0]].forEach(function(a){
+        var b=E('button',a[0]);b.type='button';b.className='mini';
+        b.setAttribute('aria-label',(a[1]<0?'Move up ':a[1]>0?'Move down ':'Remove ')+f.name);
+        b.addEventListener('click',function(){
+          if(!a[1])files.splice(i,1);else{var j=i+a[1];if(j<0||j>=files.length)return;var t=files[i];files[i]=files[j];files[j]=t}
+          draw();
+        });
+        r.appendChild(b);r.appendChild(document.createTextNode(' '));
+      });
+      li.appendChild(n);li.appendChild(s);li.appendChild(r);ul.appendChild(li);
+    });
+  };
+  $('mIn').addEventListener('change',function(){
+    files=files.concat([].slice.call($('mIn').files)).slice(0,30);$('mIn').value='';draw();
+  });
+  $('mRun').addEventListener('click',async function(){
+    $('e2').textContent='';$('s2').textContent='';
+    if(files.length<2){$('e2').textContent='Please add at least two PDF files.';return}
+    $('mRun').disabled=true;$('s2').textContent='Reading PDFs...';
+    try{
+      var out=await lib().PDFDocument.create();
+      for(var i=0;i<files.length;i++){
+        $('s2').textContent='Adding PDF '+(i+1)+' of '+files.length+'...';
+        var doc=await load(files[i]);
+        var pages=await out.copyPages(doc,doc.getPageIndices());
+        pages.forEach(function(p){out.addPage(p)});
+      }
+      var bytes=await out.save();
+      save(new Blob([bytes],{type:'application/pdf'}),'merged.pdf');
+      $('s2').textContent='Merged '+files.length+' PDFs.';
+    }catch(e){
+      $('e2').textContent=e.message||'The PDFs could not be merged.';
+    }finally{
+      $('mRun').disabled=false;
+    }
+  });
+
+  /* extract pages */
+  var sourceDoc=null,sourceFile=null;
+  var parseRange=function(text,total){
+    if(!text.trim())throw new Error('Please enter pages, for example 1-3, 5, 8-.');
+    var wanted=[],seen={};
+    text.split(',').forEach(function(part){
+      part=part.trim();
+      if(!part)return;
+      var range=/^(\d+)(?:\s*-\s*(\d*)?)?$/.exec(part);
+      if(!range)throw new Error('Invalid page range: '+part);
+      var start=+range[1],end=range[2]===''?total:(range[2]?+range[2]:start);
+      if(!start||!end||start<1||end<1||start>total||end>total||start>end){
+        throw new Error('Page range must be between 1 and '+total+'.');
+      }
+      for(var n=start;n<=end;n++){
+        if(!seen[n]){seen[n]=true;wanted.push(n-1)}
+      }
+    });
+    if(!wanted.length)throw new Error('Please enter at least one page.');
+    return wanted;
+  };
+
+  $('sIn').addEventListener('change',async function(){
+    sourceDoc=null;sourceFile=this.files[0]||null;
+    $('e3').textContent='';$('s3').textContent='';$('sInfo').textContent='';
+    if(!sourceFile)return;
+    try{
+      sourceDoc=await load(sourceFile);
+      $('sInfo').textContent=sourceFile.name+' — '+sourceDoc.getPageCount()+' pages';
+    }catch(e){
+      $('e3').textContent=e.message||'The PDF could not be read.';
+    }
+  });
+
+  $('sRun').addEventListener('click',async function(){
+    $('e3').textContent='';$('s3').textContent='';
+    if(!sourceDoc||!sourceFile){$('e3').textContent='Please choose a PDF first.';return}
+    var pages;
+    try{pages=parseRange($('rg').value,sourceDoc.getPageCount())}
+    catch(e){$('e3').textContent=e.message;return}
+    $('sRun').disabled=true;$('s3').textContent='Extracting pages...';
+    try{
+      var out=await lib().PDFDocument.create();
+      var copied=await out.copyPages(sourceDoc,pages);
+      copied.forEach(function(p){out.addPage(p)});
+      var bytes=await out.save();
+      save(new Blob([bytes],{type:'application/pdf'}),stem(sourceFile.name)+'-pages.pdf');
+      $('s3').textContent='Extracted '+pages.length+' page'+(pages.length===1?'':'s')+'.';
+    }catch(e){
+      $('e3').textContent=e.message||'The pages could not be extracted.';
+    }finally{
+      $('sRun').disabled=false;
+    }
+  });
+})();
+</script>
+<script src="code-rain.js" defer></script>
+</body>
+</html>

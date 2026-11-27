@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Book a call | Joseph</title>
+<meta name="description" content="Pick a time that works in your timezone and mine. See the overlap, choose a slot and send a request.">
+<meta name="theme-color" content="#0A0F2A">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0F2A;--ink:#EEF1F7;--mute:#A3AECB;--line:rgba(255,255,255,.18);--acc:#FF7A45;--g:#7CFFB2;
+  --display:'Bricolage Grotesque','Segoe UI',Arial,sans-serif;--body:'Public Sans','Segoe UI',Arial,sans-serif;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg) radial-gradient(60% 40% at 80% 0%,rgba(255,122,69,.16),transparent 70%) no-repeat;color:var(--ink);font:1.0625rem/1.6 var(--body)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px;border-radius:6px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:.9rem clamp(1rem,3vw,2rem);border-bottom:1px solid var(--line)}
+.top a{text-decoration:none;color:var(--mute);font-size:.92rem}
+.top .brand{font:800 1.2rem var(--display);color:var(--ink)}.brand span{color:var(--acc)}
+main{width:min(820px,100% - 2rem);margin:0 auto;padding:2.5rem 0 3rem}
+h1{font:800 clamp(2rem,6vw,3.4rem)/1.05 var(--display);letter-spacing:-.03em;margin:0 0 .6rem}
+h2{font:800 1.15rem var(--display);margin:0 0 .7rem}
+.lead,.note{color:var(--mute)}.lead{margin:0 0 1.6rem}.note{font-size:.88rem;margin:.5rem 0 0}
+.card{border:1px solid var(--line);border-radius:20px;padding:1.3rem;background:rgba(255,255,255,.05);margin-bottom:1rem}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+.fld{display:grid;gap:.3rem;min-width:0}.fld.w{grid-column:1/-1}
+label,legend{font-size:.85rem;font-weight:600;color:var(--mute)}
+select,input[type=date],input[type=text]{width:100%;background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:12px;padding:.7rem .85rem;color-scheme:dark}
+select option{color:#0A0F2A;background:#fff}
+select:focus,input:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px rgba(255,122,69,.25)}
+fieldset{border:0;margin:0;padding:0}
+.rad{display:flex;gap:.6rem}
+.rad label{display:flex;gap:.45rem;align-items:center;padding:.6rem .9rem;border:1px solid var(--line);border-radius:12px;color:var(--ink);font-weight:500;cursor:pointer}
+.rad input{accent-color:#FF7A45}
+.bar{display:grid;grid-template-columns:repeat(24,1fr);gap:2px;margin:.9rem 0 .3rem}
+.bar i{height:34px;border-radius:5px;background:rgba(255,255,255,.07)}
+.bar i.w{background:rgba(163,174,203,.28)}
+.bar i.f{background:var(--g)}
+.tick{display:grid;grid-template-columns:repeat(4,1fr);font-size:.78rem;color:var(--mute)}
+.tick span:nth-child(n+2){text-align:center}.tick span:last-child{text-align:right}
+.key{display:flex;gap:1rem;flex-wrap:wrap;font-size:.8rem;color:var(--mute);margin-top:.5rem}
+.key i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:.35rem}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:.5rem;margin-top:.8rem}
+.slots button{text-align:left;padding:.6rem .8rem;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.06);cursor:pointer}
+.slots button:hover{border-color:var(--acc)}
+.slots button[aria-pressed="true"]{border-color:var(--acc);background:rgba(255,122,69,.2)}
+.slots b{display:block}.slots small{color:var(--mute)}
+.btn{padding:.7rem 1.3rem;border-radius:99px;border:2px solid var(--ink);background:none;cursor:pointer;font-weight:600;text-decoration:none;display:inline-block}
+.btn:hover{background:var(--ink);color:var(--bg)}
+.btn.p{background:var(--acc);border-color:var(--acc);color:#0A0F2A}.btn.p:hover{opacity:.9;background:var(--acc)}
+.row{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem}
+.err{color:#FF8A80;min-height:1.3em;margin:.5rem 0 0;font-size:.92rem}
+.sum{font-size:1.1rem}.sum b{color:var(--g)}
+[hidden]{display:none!important}
+@media (max-width:600px){.form{grid-template-columns:1fr}}
+</style>
+<link rel="stylesheet" href="responsive.css">
+</head>
+<body>
+<header class="top"><a class="brand" href="index.html">Joseph<span>.</span></a><a href="index.html">Back to portfolio</a></header>
+<main>
+  <h1>Book a call</h1>
+  <p class="lead">Pick your city and day, and see exactly where your working hours meet mine. Choose a time and send a request.</p>
+
+  <section class="card" aria-labelledby="h1">
+    <h2 id="h1">1. Your details</h2>
+    <div class="form">
+      <div class="fld"><label for="tz">Your city</label><select id="tz"></select></div>
+      <div class="fld"><label for="dt">Day (Pakistan date)</label><input id="dt" type="date"></div>
+      <div class="fld"><label for="wh">Your working hours</label>
+        <select id="wh"><option value="9-17">9:00 to 17:00</option><option value="9-18" selected>9:00 to 18:00</option><option value="8-20">8:00 to 20:00</option><option value="8-23">Flexible: 8:00 to 23:00</option></select></div>
+      <fieldset class="fld"><legend>Call length</legend>
+        <div class="rad"><label><input type="radio" name="du" value="30" checked>30 minutes</label><label><input type="radio" name="du" value="60">60 minutes</label></div></fieldset>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="h2">
+    <h2 id="h2">2. Where our hours meet</h2>
+    <div class="bar" id="bar" aria-hidden="true"></div>
+    <div class="tick" aria-hidden="true"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span></div>
+    <div class="key"><span><i style="background:var(--g)"></i>Both free</span><span><i style="background:rgba(163,174,203,.45)"></i>My working hours</span></div>
+    <p class="note">The strip shows the 24 hours of the chosen day in Pakistan time (UTC+5).</p>
+    <p id="count" role="status" aria-live="polite" style="margin:1rem 0 0"></p>
+    <div class="slots" id="slots"></div>
+  </section>
+
+  <section class="card" id="req" hidden aria-labelledby="h3">
+    <h2 id="h3">3. Send your request</h2>
+    <p class="sum" id="sum" role="status"></p>
+    <div class="form">
+      <div class="fld"><label for="nm">Your name</label><input id="nm" type="text" autocomplete="name"></div>
+      <div class="fld"><label for="tp">What is it about? (optional)</label><input id="tp" type="text" maxlength="120" placeholder="For example: a new website"></div>
+    </div>
+    <p class="err" id="err" role="alert"></p>
+    <div class="row">
+      <button class="btn p" id="wa" type="button">Request on WhatsApp</button>
+      <button class="btn" id="ml" type="button">Request by email</button>
+      <button class="btn" id="ics" type="button">Download calendar file</button>
+    </div>
+    <p class="note">This is a request, not a booking. I confirm every call personally, usually within a day.</p>
+  </section>
+  <p class="note">My usual hours are 10:00 to 20:00 Pakistan time, Monday to Saturday. Times are rules, not a live calendar, so I may suggest another time.</p>
+</main>
+
+<script>
+(function(){
+  /* Edit these to match your real availability. */
+  var WA='923000000000',MAIL='hello@webforge studio.com';
+  var OPEN=10,CLOSE=20;           /* your hours, Pakistan time */
+  var DAYS=[1,2,3,4,5,6];         /* working days, 0 = Sunday */
+  var LEAD=3;                     /* earliest slot, in hours from now */
+  var PK=5;                       /* Pakistan is UTC+5, no daylight saving */
+
+  var $=function(i){return document.getElementById(i)};
+  var E=function(t,x){var e=document.createElement(t);if(x!==undefined)e.textContent=x;return e};
+  var p2=function(n){return (n<10?'0':'')+n};
+  var CITIES=[['Dubai','Asia/Dubai'],['Riyadh','Asia/Riyadh'],['Doha','Asia/Qatar'],['Istanbul','Europe/Istanbul'],['Cairo','Africa/Cairo'],['Lagos','Africa/Lagos'],['Nairobi','Africa/Nairobi'],['Johannesburg','Africa/Johannesburg'],
+    ['London','Europe/London'],['Paris','Europe/Paris'],['Berlin','Europe/Berlin'],['Madrid','Europe/Madrid'],['Amsterdam','Europe/Amsterdam'],['Moscow','Europe/Moscow'],
+    ['Delhi','Asia/Kolkata'],['Dhaka','Asia/Dhaka'],['Bangkok','Asia/Bangkok'],['Singapore','Asia/Singapore'],['Hong Kong','Asia/Hong_Kong'],['Shanghai','Asia/Shanghai'],['Tokyo','Asia/Tokyo'],['Seoul','Asia/Seoul'],
+    ['Sydney','Australia/Sydney'],['Auckland','Pacific/Auckland'],
+    ['Toronto','America/Toronto'],['New York','America/New_York'],['Chicago','America/Chicago'],['Denver','America/Denver'],['Los Angeles','America/Los_Angeles'],['Vancouver','America/Vancouver'],['Mexico City','America/Mexico_City'],['Sao Paulo','America/Sao_Paulo']];
+  var mine='';try{mine=Intl.DateTimeFormat().resolvedOptions().timeZone}catch(e){}
+  if(mine&&mine!=='Asia/Karachi'&&!CITIES.some(function(c){return c[1]===mine}))CITIES.unshift(['This device ('+mine+')',mine]);
+  CITIES.unshift(['Karachi / Lahore (same as me)','Asia/Karachi']);
+  CITIES.forEach(function(c){var o=E('option',c[0]);o.value=c[1];$('tz').appendChild(o)});
+  if(mine)$('tz').value=mine;if($('tz').value!==mine)$('tz').selectedIndex=0;
+
+  var fm={};
+  var loc=function(ms,tz){
+    var f=fm[tz]||(fm[tz]=new Intl.DateTimeFormat('en-GB',{timeZone:tz,weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}));
+    var o={};f.formatToParts(new Date(ms)).forEach(function(x){o[x.type]=x.value});
+    return {m:+o.hour*60+ +o.minute,t:o.hour+':'+o.minute,d:o.weekday+' '+o.day+' '+o.month};
+  };
+  var ymd=function(d){return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())};
+  var t0=new Date(),t1=new Date(t0.getTime()+864e5),t2=new Date(t0.getTime()+60*864e5);
+  $('dt').min=ymd(t0);$('dt').max=ymd(t2);$('dt').value=ymd(t1);
+
+  var sel=null,slots=[];
+  var calc=function(){
+    sel=null;$('req').hidden=true;$('slots').textContent='';$('bar').textContent='';
+    var v=$('dt').value.split('-');
+    if(v.length<3||!v[0]){$('count').textContent='Please choose a day.';return}
+    var y=+v[0],mo=+v[1]-1,d=+v[2],tz=$('tz').value,dur=+document.querySelector('input[name="du"]:checked').value;
+    var wh=$('wh').value.split('-'),oc=+wh[0]*60,cc=+wh[1]*60;
+    var base=Date.UTC(y,mo,d)-PK*36e5,ok={},i;
+    slots=[];
+    if(DAYS.indexOf(new Date(Date.UTC(y,mo,d)).getUTCDay())>-1){
+      for(i=0;i<48;i++){
+        var sm=i*30,s=base+i*18e5,e=s+dur*6e4;
+        if(sm<OPEN*60||sm+dur>CLOSE*60||s<Date.now()+LEAD*36e5)continue;
+        var a=loc(s,tz),b=loc(e,tz);
+        if(a.m<oc||b.m>cc||b.m<=a.m)continue;
+        slots.push({s:s,e:e,a:a,b:b,k:p2(Math.floor(i/2))+':'+(i%2?'30':'00')});ok[i]=1;
+      }
+    }
+    for(var h=0;h<24;h++){
+      var c=E('i');
+      if(DAYS.indexOf(new Date(Date.UTC(y,mo,d)).getUTCDay())>-1&&h>=OPEN&&h<CLOSE)c.className='w';
+      if(ok[2*h]||ok[2*h+1])c.className='f';
+      $('bar').appendChild(c);
+    }
+    $('count').textContent=!slots.length?
+      (DAYS.indexOf(new Date(Date.UTC(y,mo,d)).getUTCDay())<0?'I do not take calls on that day. Please pick another day.':'No shared time on this day. Try another day, longer working hours or a 30 minute call.')
+      :slots.length+' possible start '+(slots.length===1?'time':'times')+' on this day. Choose one:';
+    slots.forEach(function(q){
+      var b=E('button');b.type='button';b.setAttribute('aria-pressed','false');
+      b.appendChild(E('b',q.a.t+' your time'));b.appendChild(E('small',q.a.d+' \u00B7 '+q.k+' Pakistan'));
+      b.onclick=function(){
+        [].forEach.call($('slots').children,function(x){x.setAttribute('aria-pressed',x===b)});
+        sel=q;$('req').hidden=false;$('err').textContent='';
+        $('sum').textContent='';
+        var s=E('b',q.a.d+', '+q.a.t+' to '+q.b.t);$('sum').appendChild(s);
+        $('sum').appendChild(document.createTextNode(' your time ('+q.k+' Pakistan time), '+dur+' minutes.'));
+      };
+      $('slots').appendChild(b);
+    });
+  };
+  ['tz','dt','wh'].forEach(function(i){$(i).addEventListener('change',calc)});
+  [].forEach.call(document.querySelectorAll('input[name="du"]'),function(r){r.addEventListener('change',calc)});
+
+  var text=function(){
+    var dur=Math.round((sel.e-sel.s)/6e4),city=$('tz').options[$('tz').selectedIndex].text,tp=$('tp').value.trim();
+    return 'Hi Joseph, I would like a '+dur+' minute call.\n\nTime: '+sel.a.d+', '+sel.a.t+' to '+sel.b.t+' ('+city+')\nIn Pakistan: '+sel.k+' (UTC+5)\nName: '+$('nm').value.trim()+(tp?'\nAbout: '+tp:'')+'\n\nPlease confirm if this works.';
+  };
+  var need=function(){
+    if(!sel){$('err').textContent='Please choose a time first.';return false}
+    if(!$('nm').value.trim()){$('err').textContent='Please enter your name.';$('nm').focus();return false}
+    $('err').textContent='';return true;
+  };
+  $('wa').onclick=function(){if(need())window.open('https://wa.me/'+WA+'?text='+encodeURIComponent(text()),'_blank','noopener')};
+  $('ml').onclick=function(){if(need())location.href='mailto:'+MAIL+'?subject='+encodeURIComponent('Call request: '+sel.a.d+' '+sel.a.t)+'&body='+encodeURIComponent(text())};
+  $('ics').onclick=function(){
+    if(!need())return;
+    var z=function(ms){return new Date(ms).toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'')};
+    var body=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Joseph//Call request//EN','BEGIN:VEVENT','UID:'+sel.s+'@Joseph','DTSTAMP:'+z(Date.now()),'DTSTART:'+z(sel.s),'DTEND:'+z(sel.e),'SUMMARY:Call with Joseph (requested, not yet confirmed)','DESCRIPTION:Requested time. Joseph will confirm.','END:VEVENT','END:VCALENDAR'].join('\r\n');
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob([body],{type:'text/calendar'}));a.download='call-with-Webforge Studioics';
+    document.body.appendChild(a);a.click();a.remove();
+  };
+  calc();
+})();
+</script>
+<script src="code-rain.js" defer></script>
+</body>
+</html>

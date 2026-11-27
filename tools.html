@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Free security tools – Joseph</title>
+<meta name="description" content="Free browser-based tools: password checker, hash generator, Base64, JWT decoder and password generator. Nothing leaves your device.">
+<meta name="theme-color" content="#0B1023">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2722%27 fill=%27%23E8480C%27/%3E%3Ctext x=%2750%27 y=%2772%27 font-size=%2770%27 font-weight=%27800%27 text-anchor=%27middle%27 fill=%27white%27 font-family=%27Arial%27%3EA%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF1F7; --ink:#0C1226; --mute:#4F5A76; --line:#C3CBDD; --panel:#E2E7F3;
+  --blue:#E8480C; --onblue:#FFFFFF; --ok:#1B7F4B; --bad:#C5221F;
+  --display:'Bricolage Grotesque','Segoe UI',Arial,sans-serif;
+  --body:'Public Sans','Segoe UI',Arial,sans-serif;
+  --mono:ui-monospace,Menlo,Consolas,monospace;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0B1023;--ink:#EEF1F7;--mute:#9AA5C2;--line:#28315A;--panel:#131A38;--blue:#FF7A45;--onblue:#0B1023;--ok:#5FE3A1;--bad:#FF8A80;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0B1023;--ink:#EEF1F7;--mute:#9AA5C2;--line:#28315A;--panel:#131A38;--blue:#FF7A45;--onblue:#0B1023;--ok:#5FE3A1;--bad:#FF8A80;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:1.0625rem/1.6 var(--body);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:4px}
+.wrap{width:min(1180px,100% - 2.5rem);margin-inline:auto}
+h1,h2,h3{font-family:var(--display);line-height:1.05;margin:0;letter-spacing:-.02em}
+.top{border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:1rem}
+.brand{font-family:var(--display);font-weight:800;font-size:1.2rem;text-decoration:none}
+.brand span{color:var(--blue)}
+.nav{display:flex;align-items:center;gap:1.25rem;font-size:.95rem;font-weight:500}
+.nav a{text-decoration:none;color:var(--mute)}
+.nav a:hover{color:var(--ink)}
+.tbtn{font:inherit;font-size:.9rem;font-weight:500;background:none;border:1px solid var(--line);color:var(--ink);padding:.35rem .85rem;border-radius:99px;cursor:pointer}
+.intro{padding:clamp(3rem,7vw,5.5rem) 0 2rem}
+.intro h1{font-size:clamp(2.8rem,8vw,6rem);font-weight:800;letter-spacing:-.04em}
+.intro p{max-width:56ch;color:var(--mute);margin:1rem 0 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;padding-bottom:5rem}
+.card{border:1px solid var(--line);background:var(--panel);border-radius:22px;padding:clamp(1.25rem,3vw,2rem);display:flex;flex-direction:column;gap:.9rem;min-width:0}
+.card.wide{grid-column:1/-1}
+.card h2{font-size:1.7rem;font-weight:600}
+.card .d{margin:-.4rem 0 0;color:var(--mute);font-size:.97rem}
+label{font-size:.9rem;font-weight:600}
+input[type=text],input[type=password],textarea{width:100%;font:1rem var(--mono);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:.8rem .95rem}
+textarea{min-height:110px;resize:vertical}
+input:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 25%,transparent)}
+.btn{font:600 .95rem var(--body);padding:.6rem 1.1rem;border-radius:99px;border:2px solid var(--ink);background:none;color:var(--ink);cursor:pointer;transition:background .2s,color .2s}
+.btn:hover{background:var(--ink);color:var(--bg)}
+.btn.fill{background:var(--blue);border-color:var(--blue);color:var(--onblue)}
+.btn.fill:hover{opacity:.9;background:var(--blue);color:var(--onblue)}
+.row{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center}
+.meter{height:10px;border-radius:99px;background:var(--line);overflow:hidden}
+.meter i{display:block;height:100%;width:0;border-radius:99px;background:var(--blue);transition:width .3s,background .3s}
+.res{font-family:var(--display);font-size:1.3rem;font-weight:600}
+.hint{color:var(--mute);font-size:.93rem;margin:0}
+.err{color:var(--bad);font-size:.9rem;margin:0;min-height:1.2em}
+.out{font:.88rem/1.5 var(--mono);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:.7rem .9rem;word-break:break-all;margin:0;white-space:pre-wrap;min-height:2.6rem}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+.chk{display:flex;flex-wrap:wrap;gap:.4rem 1.2rem}
+.chk label{font-weight:500;display:flex;gap:.45rem;align-items:center}
+input[type=range]{width:100%;accent-color:var(--blue)}
+.toast{position:fixed;left:50%;bottom:calc(1.5rem + env(safe-area-inset-bottom,0px));transform:translate(-50%,150%);background:var(--ink);color:var(--bg);padding:.7rem 1.2rem;border-radius:8px;font-size:.95rem;transition:transform .3s;z-index:30}
+.toast.show{transform:translate(-50%,0)}
+footer{border-top:1px solid var(--line);padding:1.5rem 0 2rem;color:var(--mute);font-size:.9rem}
+@media (max-width:860px){.grid,.two{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.meter i,.toast{transition:none}}
+</style>
+<link rel="stylesheet" href="responsive.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="index.html">Joseph<span>.</span></a>
+  <div class="nav"><a href="index.html">Back to portfolio</a><button class="tbtn" id="theme" type="button">Theme</button></div>
+</div></header>
+
+<main class="wrap">
+  <section class="intro">
+    <h1>Free security tools</h1>
+    <p>Five small tools I use myself. Everything runs inside your browser. Nothing you type is sent or saved anywhere.</p>
+  </section>
+
+  <div class="grid">
+    <section class="card" aria-labelledby="h1t">
+      <h2 id="h1t">Password strength</h2>
+      <p class="d">An estimate, based on length and variety.</p>
+      <label for="pw">Type a password to test</label>
+      <div class="row"><input id="pw" type="password" autocomplete="off" style="flex:1;min-width:0"><button class="btn" id="pwshow" type="button" aria-pressed="false">Show</button></div>
+      <div class="meter" aria-hidden="true"><i id="pwbar"></i></div>
+      <div class="res" id="pwres" aria-live="polite">Start typing</div>
+      <p class="hint" id="pwtime"></p>
+      <p class="hint" id="pwtip"></p>
+    </section>
+
+    <section class="card" aria-labelledby="h2t">
+      <h2 id="h2t">Password generator</h2>
+      <p class="d">Uses your browser’s secure random generator.</p>
+      <input id="gout" type="text" readonly aria-label="Generated password">
+      <label for="len">Length: <span id="lenv">20</span></label>
+      <input id="len" type="range" min="8" max="64" value="20">
+      <div class="chk">
+        <label><input type="checkbox" id="lo" checked> a-z</label>
+        <label><input type="checkbox" id="up" checked> A-Z</label>
+        <label><input type="checkbox" id="di" checked> 0-9</label>
+        <label><input type="checkbox" id="sy" checked> Symbols</label>
+      </div>
+      <div class="row"><button class="btn fill" id="gen" type="button">Generate</button><button class="btn" type="button" data-copy="gout">Copy</button></div>
+    </section>
+
+    <section class="card" aria-labelledby="h3t">
+      <h2 id="h3t">Hash generator</h2>
+      <p class="d">SHA-256 and SHA-512 of any text, updated as you type.</p>
+      <label for="hin">Text</label>
+      <textarea id="hin">Hello, webforge studio</textarea>
+      <label>SHA-256</label><pre class="out" id="h256"></pre>
+      <div class="row"><button class="btn" type="button" data-copy="h256">Copy SHA-256</button></div>
+      <label>SHA-512</label><pre class="out" id="h512"></pre>
+      <div class="row"><button class="btn" type="button" data-copy="h512">Copy SHA-512</button></div>
+    </section>
+
+    <section class="card" aria-labelledby="h4t">
+      <h2 id="h4t">Base64 encode and decode</h2>
+      <p class="d">Works with any language, including Urdu.</p>
+      <label for="bin">Input</label>
+      <textarea id="bin"></textarea>
+      <div class="row"><button class="btn fill" id="b64e" type="button">Encode</button><button class="btn" id="b64d" type="button">Decode</button></div>
+      <p class="err" id="berr" aria-live="polite"></p>
+      <label for="bout">Result</label>
+      <textarea id="bout" readonly></textarea>
+      <div class="row"><button class="btn" type="button" data-copy="bout">Copy result</button></div>
+    </section>
+      
+        <section class="card wide" aria-labelledby="h7t">
+      <h2 id="h7t">Watch an attacker work</h2>
+      <p class="d">A simulation of how real password guessing goes. Use an example password, not one you really use. Nothing is sent anywhere.</p>
+      <label for="atin">Password to attack</label>
+      <div class="row"><input id="atin" type="text" autocomplete="off" spellcheck="false" placeholder="Try: Joseph@123" style="flex:1;min-width:0"><button class="btn fill" id="atgo" type="button">Start attack</button></div>
+      <pre class="out" id="atout" role="log" aria-live="polite" style="min-height:230px"></pre>
+      <p class="res" id="atres" aria-live="polite"></p>
+      <p class="hint" id="atnote"></p>
+      <p class="err" id="aterr" aria-live="polite"></p>
+    </section>
+    
+        <section class="card wide" aria-labelledby="h6t">
+      <h2 id="h6t">Has my password been leaked?</h2>
+      <p class="d">Checks the public Pwned Passwords database of hundreds of millions of leaked passwords. Only the first 5 characters of the password’s SHA-1 hash are sent, never the password itself.</p>
+      <label for="lkin">Password to check</label>
+      <div class="row"><input id="lkin" type="password" autocomplete="off" style="flex:1;min-width:0"><button class="btn fill" id="lkgo" type="button">Check</button></div>
+      <p class="res" id="lkres" aria-live="polite"></p>
+      <p class="hint" id="lknote"></p>
+      <p class="err" id="lkerr" aria-live="polite"></p>
+      <p class="hint">Tip: test an old password you no longer use. To see exactly what is sent, open your browser’s Network tab (F12) and press Check.</p>
+    </section>
+
+    <section class="card wide" aria-labelledby="h5t">
+      <h2 id="h5t">JWT decoder</h2>
+      <p class="d">Reads the contents of a token. It does not check the signature, so never treat a decoded token as proof of who someone is.</p>
+      <label for="jin">Paste a token</label>
+      <textarea id="jin" spellcheck="false"></textarea>
+      <div class="row"><button class="btn" id="jsample" type="button">Try a sample</button></div>
+      <p class="err" id="jerr" aria-live="polite"></p>
+      <p class="res" id="jm"></p>
+      <div class="two">
+        <div><label>Header</label><pre class="out" id="jh"></pre></div>
+        <div><label>Payload</label><pre class="out" id="jp"></pre></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer><div class="wrap">&copy; <span id="yr">2026</span> webforge studio Pvt. Ltd. Tools are provided as is, for learning and quick checks.</div></footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const root=document.documentElement;
+try{const s=localStorage.getItem('theme');if(s)root.setAttribute('data-theme',s)}catch(e){}
+$('theme').onclick=()=>{
+  const dark=root.getAttribute('data-theme')==='dark'||(!root.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);
+  const n=dark?'light':'dark';root.setAttribute('data-theme',n);
+  try{localStorage.setItem('theme',n)}catch(e){}
+};
+$('yr').textContent=new Date().getFullYear();
+const toast=m=>{const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('show'),1800)};
+document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=async()=>{
+  const el=$(b.dataset.copy),v=el.value!==undefined?el.value:el.textContent;
+  if(!v)return;
+  try{await navigator.clipboard.writeText(v);toast('Copied')}catch(e){toast('Copy failed')}
+});
+
+/* password strength */
+const common=['password','123456','qwerty','abc123','letmein','111111','iloveyou','admin','welcome','pakistan','000000'];
+const fmt=s=>{
+  if(s<1)return 'instantly';
+  if(s<60)return Math.round(s)+' seconds';
+  if(s<3600)return Math.round(s/60)+' minutes';
+  if(s<86400)return Math.round(s/3600)+' hours';
+  if(s<31536000)return Math.round(s/86400)+' days';
+  if(s<3.15e9)return Math.round(s/31536000)+' years';
+  return 'centuries';
+};
+$('pwshow').onclick=()=>{const p=$('pw'),show=p.type==='password';p.type=show?'text':'password';$('pwshow').textContent=show?'Hide':'Show';$('pwshow').setAttribute('aria-pressed',show)};
+$('pw').oninput=()=>{
+  const v=$('pw').value;
+  if(!v){$('pwbar').style.width='0';$('pwres').textContent='Start typing';$('pwtime').textContent='';$('pwtip').textContent='';return}
+  let pool=0;
+  if(/[a-z]/.test(v))pool+=26;if(/[A-Z]/.test(v))pool+=26;if(/[0-9]/.test(v))pool+=10;if(/[^a-zA-Z0-9]/.test(v))pool+=33;
+  let bits=v.length*Math.log2(pool);
+  const weakWord=common.some(c=>v.toLowerCase().includes(c));
+  if(new Set(v).size<v.length/2)bits*=.6;
+  if(weakWord)bits=Math.min(bits,20);
+  const tiers=[[28,'Very weak','#C5221F'],[36,'Weak','#E8480C'],[60,'Fair','#C98A00'],[80,'Strong','#1B7F4B'],[1e9,'Very strong','#1B7F4B']];
+  const t=tiers.find(x=>bits<x[0]);
+  $('pwbar').style.width=Math.min(100,bits/90*100)+'%';
+  $('pwbar').style.background=t[2];
+  $('pwres').textContent=t[1];
+  $('pwtime').textContent='A fast attacker could guess this in about '+fmt(Math.pow(2,bits)/2e10)+'.';
+  const tips=[];
+  if(weakWord)tips.push('It contains a very common word.');
+  if(v.length<12)tips.push('Use at least 12 characters.');
+  if(pool<62)tips.push('Mix upper and lower case, numbers and symbols.');
+  $('pwtip').textContent=tips.join(' ');
+};
+
+/* password generator */
+const sets={lo:'abcdefghijklmnopqrstuvwxyz',up:'ABCDEFGHIJKLMNOPQRSTUVWXYZ',di:'0123456789',sy:'!@#$%^&*()-_=+[]{};:,.?'};
+const rnd=n=>{const lim=Math.floor(4294967296/n)*n;let x;do{x=crypto.getRandomValues(new Uint32Array(1))[0]}while(x>=lim);return x%n};
+const gen=()=>{
+  const L=+$('len').value;$('lenv').textContent=L;
+  const on=Object.keys(sets).filter(k=>$(k).checked);
+  if(!on.length){$('gout').value='';return}
+  const pool=on.map(k=>sets[k]).join('');
+  const out=on.map(k=>sets[k][rnd(sets[k].length)]);
+  while(out.length<L)out.push(pool[rnd(pool.length)]);
+  for(let i=out.length-1;i>0;i--){const j=rnd(i+1);[out[i],out[j]]=[out[j],out[i]]}
+  $('gout').value=out.join('');
+};
+$('gen').onclick=gen;$('len').oninput=gen;
+['lo','up','di','sy'].forEach(k=>$(k).onchange=gen);
+gen();
+
+/* hashes */
+const hex=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
+const hash=async()=>{
+  const d=new TextEncoder().encode($('hin').value);
+  if(!crypto.subtle){$('h256').textContent='Hashing needs a secure page (https or localhost).';return}
+  $('h256').textContent=hex(await crypto.subtle.digest('SHA-256',d));
+  $('h512').textContent=hex(await crypto.subtle.digest('SHA-512',d));
+};
+$('hin').oninput=hash;hash();
+
+/* base64 */
+$('b64e').onclick=()=>{
+  let s='';new TextEncoder().encode($('bin').value).forEach(x=>s+=String.fromCharCode(x));
+  $('bout').value=btoa(s);$('berr').textContent='';
+};
+$('b64d').onclick=()=>{
+  try{
+    const s=atob($('bin').value.trim().replace(/-/g,'+').replace(/_/g,'/'));
+    $('bout').value=new TextDecoder('utf-8',{fatal:true}).decode(Uint8Array.from(s,c=>c.charCodeAt(0)));
+    $('berr').textContent='';
+  }catch(e){$('bout').value='';$('berr').textContent='That is not valid Base64 text.'}
+};
+
+/* jwt */
+const b64u=s=>{s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return new TextDecoder().decode(Uint8Array.from(atob(s),c=>c.charCodeAt(0)))};
+const enc=o=>btoa(JSON.stringify(o)).replace(/=+$/,'').replace(/\+/g,'-').replace(/\//g,'_');
+$('jin').oninput=()=>{
+  const t=$('jin').value.trim();
+  ['jh','jp','jm','jerr'].forEach(i=>$(i).textContent='');
+  if(!t)return;
+  try{
+    const p=t.split('.');if(p.length!==3)throw 0;
+    const h=JSON.parse(b64u(p[0])),pl=JSON.parse(b64u(p[1]));
+    $('jh').textContent=JSON.stringify(h,null,2);
+    $('jp').textContent=JSON.stringify(pl,null,2);
+    if(typeof pl.exp==='number'){const d=new Date(pl.exp*1000);$('jm').textContent=(d<new Date()?'Expired on ':'Expires on ')+d.toLocaleString()}
+  }catch(e){$('jerr').textContent='That does not look like a valid JWT (three parts separated by dots).'}
+};
+$('jsample').onclick=()=>{
+  const n=Math.floor(Date.now()/1000);
+  $('jin').value=enc({alg:'HS256',typ:'JWT'})+'.'+enc({sub:'1234',name:'Joseph',iat:n,exp:n+3600})+'.sample-signature';
+  $('jin').oninput();
+};
+
+/* attacker demo */
+const atkWords='password,admin,welcome,login,letmein,monkey,dragon,master,sunshine,princess,football,baseball,iloveyou,qwerty,abc,hello,freedom,shadow,secret,cheese,ninja,mustang,trustno,whatever,starwars,pakistan,lahore,karachi,multan,islamabad,allah,bismillah,cricket,khan,ali,ahmed,hassan,Joseph,webforge studio,test,user,root,guest,love,angel,flower,summer,winter,jesus,michael,jordan,superman,batman,pepper,ginger,soccer,hockey,killer,hunter,tiger,lion,computer,internet,google,facebook,whatsapp,iphone,samsung'.split(',');
+const atkSuf=['','1','12','123','1234','12345','!','@','@123','#1','786','2023','2024','2025','2026'];
+const atkLeet=s=>s.replace(/a/gi,'@').replace(/o/gi,'0').replace(/e/gi,'3').replace(/i/gi,'1').replace(/s/gi,'$');
+const atkTime=s=>{
+  if(s<1)return 'less than a second';
+  if(s<60)return Math.round(s)+' seconds';
+  if(s<3600)return Math.round(s/60)+' minutes';
+  if(s<86400)return Math.round(s/3600)+' hours';
+  if(s<31536000)return Math.round(s/86400)+' days';
+  const y=s/31536000;
+  if(y>1.38e10)return 'longer than the age of the universe';
+  if(y>1e6)return y.toExponential(1).replace('e+',' x 10^')+' years';
+  return Math.round(y).toLocaleString('en-US')+' years';
+};
+const atkRun=()=>{
+  const v=$('atin').value,out=$('atout'),res=$('atres');
+  out.textContent='';res.textContent='';res.style.color='';
+  $('atnote').textContent='';$('aterr').textContent='';
+  if(!v){$('aterr').textContent='Type an example password first.';return}
+  const t0=performance.now();
+  let tries=0,hit=false;
+  const test=c=>{tries++;if(c===v){hit=true}return hit};
+  const dict=()=>{
+    for(const w of atkWords){
+      const cap=w[0].toUpperCase()+w.slice(1);
+      for(const b of [w,cap,w.toUpperCase(),atkLeet(w),atkLeet(cap)])
+        for(const s of atkSuf)if(test(b+s))return true;
+    }
+    return false;
+  };
+  const lines=['$ attack --target login --mode guess','[1] Dictionary words and common tricks...'];
+  const mask=v[0]+'*'.repeat(Math.max(0,v.length-1));
+  let end;
+  if(dict()){
+    const ms=Math.max(1,Math.round(performance.now()-t0));
+    lines.push('    '+tries.toLocaleString('en-US')+' guesses','    MATCH FOUND: '+mask,'','Cracked in '+ms+' ms.');
+    end=()=>{
+      res.textContent='Cracked in '+tries.toLocaleString('en-US')+' guesses';res.style.color='var(--bad)';
+      $('atnote').textContent='Attackers try common words and patterns first. Swapping letters for symbols (like @ for a) or adding 123 barely slows them down. Length and true randomness do.';
+    };
+  }else{
+    const d1=tries;
+    lines.push('    '+d1.toLocaleString('en-US')+' guesses, no match','[2] Numbers from 0 to 999999...');
+    let found=false;
+    for(let L=1;L<=6&&!found;L++){
+      const max=Math.pow(10,L);
+      for(let i=0;i<max;i++){if(test(String(i).padStart(L,'0'))){found=true;break}}
+    }
+    if(found){
+      const ms=Math.max(1,Math.round(performance.now()-t0));
+      lines.push('    '+(tries-d1).toLocaleString('en-US')+' guesses','    MATCH FOUND: '+mask,'','Cracked in '+ms+' ms.');
+      end=()=>{
+        res.textContent='Cracked in '+tries.toLocaleString('en-US')+' guesses';res.style.color='var(--bad)';
+        $('atnote').textContent='Short number-only passwords fall almost instantly. Every extra character and every mixed character type multiplies the work.';
+      };
+    }else{
+      lines.push('    '+(tries-d1).toLocaleString('en-US')+' guesses, no match');
+      let pool=0;
+      if(/[a-z]/.test(v))pool+=26;
+      if(/[A-Z]/.test(v))pool+=26;
+      if(/[0-9]/.test(v))pool+=10;
+      if(/[^a-zA-Z0-9]/.test(v))pool+=33;
+      const combos=Math.pow(pool,v.length),avg=combos/2;
+      lines.push('[3] Brute force estimate: length '+v.length+', '+pool+' possible symbols',
+        '    about '+combos.toExponential(1).replace('e+',' x 10^')+' combinations in total',
+        '    online login, 10 guesses/sec (rate limited):  '+atkTime(avg/10),
+        '    leaked fast hash, 10 billion/sec (GPUs):      '+atkTime(avg/1e10),
+        '    slow hash like bcrypt, 10 thousand/sec:       '+atkTime(avg/1e4),
+        '','Survived the common attacks.');
+      end=()=>{
+        res.textContent='Survived the common attacks';res.style.color='var(--ok)';
+        $('atnote').textContent='Speeds are rough assumptions for comparison, not measurements. Notice how much the site matters: the same password lasts far longer against a slow hash than a fast one. Use a long random password and a site that stores passwords with bcrypt or Argon2.';
+      };
+    }
+  }
+  $('atgo').disabled=true;
+  const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let k=0;
+  const step=()=>{
+    if(k<lines.length){out.textContent+=lines[k++]+'\n';setTimeout(step,still?0:420)}
+    else{end();$('atgo').disabled=false}
+  };
+  step();
+};
+$('atgo').onclick=atkRun;
+$('atin').addEventListener('keydown',e=>{if(e.key==='Enter')atkRun()});
+
+/* leak check */
+const lkRun=async()=>{
+  const v=$('lkin').value,res=$('lkres');
+  res.textContent='';res.style.color='';
+  $('lknote').textContent='';$('lkerr').textContent='';
+  if(!v){$('lkerr').textContent='Type a password first.';return}
+  if(!crypto.subtle){$('lkerr').textContent='This needs a secure page (https or localhost).';return}
+  $('lkgo').disabled=true;res.textContent='Checking...';
+  try{
+    const buf=await crypto.subtle.digest('SHA-1',new TextEncoder().encode(v));
+    const h=[...new Uint8Array(buf)].map(x=>x.toString(16).padStart(2,'0')).join('').toUpperCase();
+    const r=await fetch('https://api.pwnedpasswords.com/range/'+h.slice(0,5));
+    if(!r.ok)throw new Error('bad response');
+    let n=0;
+    (await r.text()).split('\n').forEach(l=>{const p=l.trim().split(':');if(p[0]===h.slice(5))n=+p[1]});
+    if(n>0){
+      res.textContent='Found in '+n.toLocaleString('en-US')+' known leaks';
+      res.style.color='var(--bad)';
+      $('lknote').textContent='Change this password anywhere it is still in use.';
+    }else{
+      res.textContent='Not found in known leaks';
+      res.style.color='var(--ok)';
+      $('lknote').textContent='This only means it has not appeared in a known leak. It does not prove the password is strong.';
+    }
+  }catch(e){
+    res.textContent='';
+    $('lkerr').textContent='Could not reach the leak database. Check your internet connection and try again.';
+  }
+  $('lkgo').disabled=false;
+};
+$('lkgo').onclick=lkRun;
+$('lkin').addEventListener('keydown',e=>{if(e.key==='Enter')lkRun()});
+
+</script>
+<script src="code-rain.js" defer></script>
+</body>
+</html>

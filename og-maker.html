@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Share image maker</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Public+Sans:wght@500&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0A0F2A;color:#EEF1F7;font:16px/1.5 system-ui,sans-serif;padding:1.5rem}
+.w{max-width:760px;margin:auto}
+canvas{width:100%;height:auto;border-radius:12px;border:1px solid #28315A;display:block;margin:1rem 0}
+label{display:block;font-size:.85rem;color:#A3AECB;margin:.8rem 0 .25rem}
+input{width:100%;padding:.6rem .8rem;border-radius:10px;border:1px solid #28315A;background:#131A38;color:#fff;font:inherit}
+button{margin-top:.5rem;padding:.7rem 1.4rem;border:0;border-radius:99px;background:#6F4DFF;color:#fff;font:600 1rem system-ui;cursor:pointer}
+</style></head><body><div class="w">
+<h1>Share image maker</h1>
+<label for="n">Name</label><input id="n" value="Joseph">
+<label for="t">Line under the name</label><input id="t" value="Web developer at Webforge Studio">
+<label for="u">Web address</label><input id="u" value="webforgesarim.github.io/mine">
+<canvas id="c" width="1200" height="630"></canvas>
+<button id="d" type="button">Download og-image.jpg</button>
+</div>
+<script>
+var c=document.getElementById('c'),x=c.getContext('2d'),$=function(i){return document.getElementById(i)};
+var draw=function(){
+  var W=1200,H=630,g,i,j;
+  x.fillStyle='#070B1A';x.fillRect(0,0,W,H);
+  g=x.createRadialGradient(1000,0,0,1000,0,720);g.addColorStop(0,'rgba(111,77,255,.95)');g.addColorStop(.45,'rgba(34,211,238,.28)');g.addColorStop(1,'rgba(7,11,26,0)');x.fillStyle=g;x.fillRect(0,0,W,H);
+  g=x.createRadialGradient(0,H,0,0,H,520);g.addColorStop(0,'rgba(255,61,129,.3)');g.addColorStop(1,'rgba(7,11,26,0)');x.fillStyle=g;x.fillRect(0,0,W,H);
+  var s=7,r=function(){s=(s*9301+49297)%233280;return s/233280},P=[];
+  for(i=0;i<70;i++)P.push([r()*W,r()*H]);
+  x.lineWidth=1;
+  for(i=0;i<P.length;i++)for(j=i+1;j<P.length;j++){
+    var dx=P[i][0]-P[j][0],dy=P[i][1]-P[j][1],d=Math.sqrt(dx*dx+dy*dy);
+    if(d<150){x.strokeStyle='rgba(255,255,255,'+(.18*(1-d/150))+')';x.beginPath();x.moveTo(P[i][0],P[i][1]);x.lineTo(P[j][0],P[j][1]);x.stroke()}
+  }
+  x.fillStyle='rgba(255,255,255,.8)';
+  P.forEach(function(p){x.beginPath();x.arc(p[0],p[1],2,0,6.283);x.fill()});
+  var name=$('n').value||'Name',size=230,F=function(){x.font='800 '+size+'px "Bricolage Grotesque","Segoe UI",Arial,sans-serif'};
+  F();while(x.measureText(name).width>1040&&size>60){size-=6;F()}
+  x.fillStyle='#fff';x.fillText(name,80,380);
+  x.font='500 44px "Public Sans","Segoe UI",Arial,sans-serif';x.fillStyle='#D4DAF0';x.fillText($('t').value,84,458);
+  x.font='500 30px "Public Sans","Segoe UI",Arial,sans-serif';x.fillStyle='#8E9ABB';x.fillText($('u').value,84,560);
+  var cx=1090,cy=520,R=46;
+  x.strokeStyle='#FF8A3D';x.lineWidth=5;x.lineJoin='round';x.beginPath();
+  for(i=0;i<6;i++){var a=Math.PI/3*i-Math.PI/2;x.lineTo(cx+R*Math.cos(a),cy+R*Math.sin(a))}
+  x.closePath();x.stroke();
+  x.strokeStyle='#fff';x.lineCap='round';x.beginPath();
+  x.moveTo(cx-14,cy-12);x.lineTo(cx-26,cy);x.lineTo(cx-14,cy+12);x.moveTo(cx+14,cy-12);x.lineTo(cx+26,cy);x.lineTo(cx+14,cy+12);x.stroke();
+  x.fillStyle='#FFB347';x.beginPath();x.moveTo(cx,cy-14);x.quadraticCurveTo(cx+14,cy+2,cx,cy+16);x.quadraticCurveTo(cx-14,cy+2,cx,cy-14);x.fill();
+};
+['n','t','u'].forEach(function(i){$(i).addEventListener('input',draw)});
+$('d').onclick=function(){c.toBlob(function(b){var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='og-image.jpg';a.click()},'image/jpeg',.88)};
+draw();
+Promise.all([document.fonts.load('800 100px "Bricolage Grotesque"'),document.fonts.load('500 40px "Public Sans"')]).then(draw,draw);
+</script></body></html>

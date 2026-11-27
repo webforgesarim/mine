@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Privacy X-Ray – Joseph</title>
+<meta name="description" content="See what any website can learn about your device in one second. Everything is calculated in your browser and nothing is sent anywhere.">
+<meta name="theme-color" content="#0A0F2A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0F2A;--ink:#EEF1F7;--mute:#9AA5C2;--line:rgba(255,255,255,.16);--acc:#FF7A45;--g:#7CFFB2;--c:#5CE1E6;
+  --display:'Bricolage Grotesque','Segoe UI',Arial,sans-serif;--body:'Public Sans','Segoe UI',Arial,sans-serif;--mono:ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:dark;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg) radial-gradient(60% 40% at 80% 0%,rgba(255,122,69,.18),transparent 70%) no-repeat;color:var(--ink);font:1.0625rem/1.6 var(--body);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--acc);outline-offset:3px;border-radius:4px}
+.wrap{width:min(1100px,100% - 2.5rem);margin-inline:auto}
+h1,h2,h3{font-family:var(--display);margin:0;letter-spacing:-.02em;line-height:1.05}
+.top{border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;justify-content:space-between;align-items:center;height:64px}
+.brand{font-family:var(--display);font-weight:800;font-size:1.2rem;text-decoration:none}
+.brand span{color:var(--acc)}
+.top nav{display:flex;gap:1.4rem;font-size:.95rem;font-weight:500}
+.top nav a{text-decoration:none;color:var(--mute)}
+.top nav a:hover{color:var(--ink)}
+.hero{padding:clamp(3rem,8vw,6rem) 0 2rem}
+.hero h1{font-size:clamp(2.6rem,8vw,6rem);font-weight:800;letter-spacing:-.04em}
+.sub{max-width:58ch;color:var(--mute);margin:1.2rem 0 2rem}
+.fp{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:22px;padding:1.6rem;background:rgba(255,255,255,.05);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
+.fp small{color:var(--mute);font-size:.9rem}
+.fp output{display:block;margin:.4rem 0 .6rem;font:700 clamp(1.5rem,5vw,3rem)/1.1 var(--mono);letter-spacing:.04em;color:var(--g);word-break:break-all}
+.fp p{margin:0;color:var(--mute);font-size:.95rem;max-width:62ch}
+.fp::after{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,var(--c),transparent);animation:scan 3.2s linear infinite}
+@keyframes scan{from{transform:translateY(0)}to{transform:translateY(260px)}}
+.sec{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;margin:3rem 0 1.2rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
+.card{border:1px solid var(--line);border-radius:20px;padding:1.3rem;background:rgba(255,255,255,.05);min-width:0}
+.card h3{font-size:1.15rem;font-weight:600;color:var(--c);margin-bottom:.8rem}
+.card dl{margin:0;display:grid;gap:.7rem}
+.card dt{font-size:.8rem;color:var(--mute)}
+.card dd{margin:0;font:.9rem/1.45 var(--mono);word-break:break-word;white-space:pre-wrap}
+.type{border:1px solid var(--line);border-radius:22px;padding:clamp(1.2rem,3vw,2rem);background:rgba(255,255,255,.05)}
+.type p{margin:0 0 1rem;color:var(--mute);max-width:62ch}
+.type textarea{width:100%;min-height:90px;font:1rem var(--mono);color:var(--ink);background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:12px;padding:.8rem}
+.stats{display:flex;flex-wrap:wrap;gap:2rem;margin:1.2rem 0}
+.stats b{display:block;font:800 2rem/1 var(--display);color:var(--g)}
+.stats span{font-size:.85rem;color:var(--mute)}
+.bars{display:flex;align-items:flex-end;gap:3px;height:80px;border-bottom:1px solid var(--line)}
+.bars i{flex:1;background:var(--acc);border-radius:3px 3px 0 0;min-height:2px}
+.btn{font:600 .95rem var(--body);margin-top:1rem;padding:.55rem 1.2rem;border-radius:99px;border:2px solid var(--ink);background:none;color:var(--ink);cursor:pointer}
+.btn:hover{background:var(--ink);color:var(--bg)}
+.tips ol{margin:0;padding-left:1.3rem;display:grid;gap:.9rem;max-width:68ch}
+.tips li::marker{color:var(--acc);font-weight:700}
+.tips b{font-weight:600}
+footer{margin-top:4rem;border-top:1px solid var(--line);padding:1.5rem 0 2rem;color:var(--mute);font-size:.9rem}
+@media (prefers-reduced-motion:reduce){.fp::after{animation:none}}
+</style>
+<link rel="stylesheet" href="responsive.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="index.html">Joseph<span>.</span></a>
+  <nav><a href="tools.html">Tools</a><a href="index.html">Back to portfolio</a></nav>
+</div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>What your browser<br>tells every website</h1>
+    <p class="sub">Open any page and it can read the facts below in about a second, with no login and no cookie. Everything here is worked out inside your browser. Nothing is sent or saved anywhere.</p>
+    <div class="fp">
+      <small>Your browser fingerprint</small>
+      <output id="fp" aria-live="polite">scanning...</output>
+      <p>Trackers combine values like these into one ID. It can change between browsers and in private mode, and it is not guaranteed to be unique, but it is often enough to recognise a returning visitor.</p>
+    </div>
+  </section>
+
+  <h2 class="sec">Collected in the last second</h2>
+  <div class="grid" id="grid"></div>
+
+  <h2 class="sec">Your typing has a rhythm</h2>
+  <section class="type">
+    <p>Type any sentence below. Only the timing between keys is measured, never what you type. Researchers have shown that this rhythm can help recognise a person.</p>
+    <textarea id="ti" spellcheck="false" aria-label="Type here to measure your typing rhythm" placeholder="Type a sentence here..."></textarea>
+    <div class="stats">
+      <div><b id="tavg">0 ms</b><span>average gap between keys</span></div>
+      <div><b id="tcpm">0</b><span>characters per minute</span></div>
+      <div><b id="tvar">0 ms</b><span>how uneven your rhythm is</span></div>
+    </div>
+    <div class="bars" id="tbars" aria-label="Chart of recent gaps between key presses"></div>
+    <button class="btn" id="tres" type="button">Reset</button>
+  </section>
+
+  <h2 class="sec">How to leak less</h2>
+  <section class="tips">
+    <ol>
+      <li><b>Use a browser with fingerprint protection.</b> Firefox with strict tracking protection and Brave both reduce what sites can read.</li>
+      <li><b>Install fewer extensions.</b> Each one makes your browser a little more unusual and easier to recognise.</li>
+      <li><b>Block third-party trackers.</b> A content blocker such as uBlock Origin stops most fingerprinting scripts from loading at all.</li>
+      <li><b>Check site permissions.</b> Review camera, microphone, location and notifications in your browser settings and remove what you do not use.</li>
+      <li><b>Keep work and personal browsing apart.</b> Separate browser profiles stop one identity from following you into the other.</li>
+    </ol>
+  </section>
+</main>
+
+<footer><div class="wrap">&copy; <span id="yr">2026</span> webforge studio Pvt. Ltd. Nothing on this page leaves your device.</div></footer>
+
+<script>
+(async()=>{
+  const $=id=>document.getElementById(id);
+  $('yr').textContent=new Date().getFullYear();
+  const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const sha=async s=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)))].map(x=>x.toString(16).padStart(2,'0')).join('');
+  if(!crypto.subtle){$('fp').textContent='Needs https or localhost';return}
+  const nav=navigator;
+  const FONTS=['Arial','Verdana','Times New Roman','Courier New','Georgia','Trebuchet MS','Impact','Comic Sans MS','Tahoma','Segoe UI','Calibri','Cambria','Consolas','Helvetica','Menlo','Monaco','Roboto','Ubuntu','Noto Sans','Open Sans','Lucida Console','Palatino Linotype','Garamond','Century Gothic','Futura','Gill Sans','Optima','Candara','Franklin Gothic Medium','Arial Narrow','Segoe Script','Bahnschrift','Nirmala UI','Noto Nastaliq Urdu','Jameel Noori Nastaleeq'];
+  const fonts=()=>{
+    const s=document.createElement('span');
+    s.textContent='mmmmmmmmmmlli';
+    s.style.cssText='position:absolute;left:-9999px;font-size:72px';
+    document.body.appendChild(s);
+    const base=['monospace','sans-serif','serif'],w={};
+    base.forEach(b=>{s.style.fontFamily=b;w[b]=s.offsetWidth});
+    const r=FONTS.filter(f=>base.some(b=>{s.style.fontFamily='"'+f+'",'+b;return s.offsetWidth!==w[b]}));
+    s.remove();return r;
+  };
+  const gpu=()=>{
+    try{
+      const g=document.createElement('canvas').getContext('webgl'),e=g.getExtension('WEBGL_debug_renderer_info');
+      return e?g.getParameter(e.UNMASKED_RENDERER_WEBGL):g.getParameter(g.RENDERER);
+    }catch(e){return 'Not available'}
+  };
+  const canvas=async()=>{
+    const c=document.createElement('canvas');c.width=260;c.height=60;
+    const x=c.getContext('2d');
+    x.textBaseline='top';x.font='16px Arial';
+    x.fillStyle='#f60';x.fillRect(10,5,100,30);
+    x.fillStyle='#069';x.fillText('Joseph fingerprint 1.0 \u263A',4,18);
+    x.fillStyle='rgba(102,204,0,.7)';x.fillText('Joseph fingerprint 1.0 \u263A',6,20);
+    return (await sha(c.toDataURL())).slice(0,32);
+  };
+  const battery=async()=>{
+    try{const b=await nav.getBattery();return Math.round(b.level*100)+'%, '+(b.charging?'charging':'not charging')}
+    catch(e){return 'Hidden by your browser'}
+  };
+  const perms=async()=>{
+    const o=[];
+    for(const n of ['geolocation','notifications','camera','microphone']){
+      try{o.push(n+': '+(await nav.permissions.query({name:n})).state)}catch(e){o.push(n+': unknown')}
+    }
+    return o.join('\n');
+  };
+  const cn=nav.connection;
+  const f=fonts(),g=gpu(),cv=await canvas();
+  const tz=Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const off=-new Date().getTimezoneOffset()/60;
+  const groups=[
+    ['Browser',[
+      ['User agent',nav.userAgent],
+      ['Platform',(nav.userAgentData&&nav.userAgentData.platform)||nav.platform||'Unknown'],
+      ['Languages',(nav.languages||[nav.language]).join(', ')],
+      ['Cookies enabled',nav.cookieEnabled?'Yes':'No'],
+      ['Do Not Track',nav.doNotTrack==='1'?'On':'Off or not set'],
+      ['Automated browser',nav.webdriver?'Yes (flagged as a bot)':'No']
+    ]],
+    ['Screen',[
+      ['Screen size',screen.width+' x '+screen.height+' at '+(window.devicePixelRatio||1)+'x'],
+      ['Window size',innerWidth+' x '+innerHeight],
+      ['Colour depth',screen.colorDepth+' bit'],
+      ['Touch points',String(nav.maxTouchPoints||0)]
+    ]],
+    ['Hardware',[
+      ['CPU threads',String(nav.hardwareConcurrency||'Hidden')],
+      ['Memory',nav.deviceMemory?'About '+nav.deviceMemory+' GB (rounded)':'Hidden by your browser'],
+      ['Graphics card',g],
+      ['Battery',await battery()]
+    ]],
+    ['Where you are, roughly',[
+      ['Timezone',tz+'  (a hint about your region)'],
+      ['UTC offset',(off>=0?'+':'')+off+' hours'],
+      ['Local time',new Date().toLocaleString()]
+    ]],
+    ['Network',[
+      ['Connection',cn?(cn.effectiveType||'?')+', about '+cn.downlink+' Mbit/s, '+cn.rtt+' ms delay':'Hidden by your browser'],
+      ['Online',nav.onLine?'Yes':'No']
+    ]],
+    ['Fonts',[
+      ['Found',f.length+' of '+FONTS.length+' test fonts'],
+      ['List',f.join(', ')||'None detected']
+    ]],
+    ['Canvas fingerprint',[
+      ['Drawing hash',cv],
+      ['What it means','Your device draws the same picture slightly differently. That tiny difference is part of your ID.']
+    ]],
+    ['Permissions (read only)',[['State',await perms()]]]
+  ];
+  const grid=$('grid');
+  groups.forEach(gr=>{
+    const card=document.createElement('div'),h=document.createElement('h3'),dl=document.createElement('dl');
+    card.className='card';h.textContent=gr[0];
+    gr[1].forEach(r=>{
+      const d=document.createElement('div'),dt=document.createElement('dt'),dd=document.createElement('dd');
+      dt.textContent=r[0];dd.textContent=r[1];
+      d.append(dt,dd);dl.appendChild(d);
+    });
+    card.append(h,dl);grid.appendChild(card);
+  });
+  const h=(await sha([nav.userAgent,nav.platform,nav.languages,tz,screen.width,screen.height,nav.hardwareConcurrency,nav.deviceMemory,g,cv,f.join()].join('|'))).slice(0,16).toUpperCase();
+  const final=h.match(/.{4}/g).join('-');
+  if(still)$('fp').textContent=final;
+  else{
+    const ch='0123456789ABCDEF';let i=0;
+    const t=setInterval(()=>{
+      $('fp').textContent=final.split('').map((c,k)=>c==='-'||k<i?c:ch[Math.random()*16|0]).join('');
+      if(++i>final.length+1){clearInterval(t);$('fp').textContent=final}
+    },60);
+  }
+
+  /* typing rhythm */
+  let last=0,t0=0,n=0,iv=[];
+  const ti=$('ti');
+  const draw=()=>{
+    const m=iv.length?iv.reduce((a,b)=>a+b,0)/iv.length:0;
+    const sd=iv.length>1?Math.sqrt(iv.reduce((a,b)=>a+(b-m)*(b-m),0)/iv.length):0;
+    const mins=(last-t0)/60000;
+    $('tavg').textContent=Math.round(m)+' ms';
+    $('tcpm').textContent=mins>.02?Math.round(n/mins):'0';
+    $('tvar').textContent=Math.round(sd)+' ms';
+    $('tbars').replaceChildren(...iv.slice(-30).map(v=>{const i=document.createElement('i');i.style.height=Math.min(100,v/5)+'%';return i}));
+  };
+  ti.addEventListener('keydown',e=>{
+    if(e.key.length!==1||e.ctrlKey||e.metaKey)return;
+    const t=e.timeStamp;
+    if(!t0)t0=t;
+    n++;
+    if(last&&t-last<2000){iv.push(t-last);if(iv.length>60)iv.shift()}
+    last=t;draw();
+  });
+  $('tres').addEventListener('click',()=>{last=0;t0=0;n=0;iv=[];ti.value='';draw()});
+  draw();
+})();
+</script>
+<script src="code-rain.js" defer></script>
+</body>
+</html>

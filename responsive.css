@@ -1,0 +1,357 @@
+:root {
+  --mobile-gutter: 1rem;
+}
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
+}
+
+.wrap,
+main,
+header,
+footer,
+section,
+article,
+.app,
+.cgrid,
+.grid,
+.cards,
+.bento,
+.plans,
+.egrid,
+.sec .grid,
+.demo,
+.tsec,
+.hero,
+.lab,
+.contact {
+  min-width: 0;
+}
+
+@media (max-width: 760px) {
+  html {
+    text-size-adjust: 100%;
+  }
+
+  body {
+    font-size: 16px;
+  }
+
+  .wrap,
+  .top .wrap {
+    width: calc(100% - (var(--mobile-gutter) * 2));
+  }
+
+  main,
+  .app,
+  .intro,
+  section,
+  .tsec,
+  .lab-title,
+  footer {
+    width: 100%;
+  }
+
+  .top {
+    position: sticky;
+  }
+
+  .top .wrap {
+    min-width: 0;
+  }
+
+  .top .brand,
+  .brand {
+    min-width: 0;
+  }
+
+  .top nav,
+  .top .nav,
+  .top nav a,
+  .top .nav a {
+    max-width: 100%;
+  }
+
+  section,
+  .intro,
+  .hero,
+  .lab,
+  .tsec,
+  .contact {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .hero {
+    min-height: auto;
+  }
+
+  .hero h1 {
+    width: 100%;
+    font-size: clamp(3.25rem, 18vw, 6rem) !important;
+    line-height: .88;
+  }
+
+  .hero .intro {
+    font-size: .68rem;
+    line-height: 1.4;
+    margin-bottom: 1rem;
+  }
+
+  .hero .lead {
+    font-size: .98rem;
+    line-height: 1.2;
+  }
+
+  .hero .meta {
+    font-size: .82rem;
+    line-height: 1.5;
+  }
+
+  .hero .meta p {
+    margin-bottom: .85rem;
+  }
+
+  .hero .btn {
+    font-size: .82rem;
+    padding: .55rem 1rem;
+  }
+
+  .mq {
+    display: none;
+  }
+
+  .hero .intro,
+  .hero .lead,
+  .hero .meta,
+  .head p,
+  .about .copy p,
+  .term,
+  .note,
+  .sub,
+  .lead {
+    max-width: 100%;
+  }
+
+  .hero .row,
+  .head,
+  .about,
+  .contact .cgrid,
+  .sec .grid,
+  .egrid,
+  .demo,
+  .plans,
+  .svc,
+  .grid,
+  .two,
+  .app,
+  .g2,
+  .g3,
+  .form,
+  .pick,
+  .ex {
+    grid-template-columns: 1fr;
+  }
+
+  .bento {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .75rem;
+  }
+
+  .bento .tile {
+    min-height: 170px;
+    padding: 1rem;
+  }
+
+  .bento .tile.big,
+  .bento .tile.wide {
+    grid-column: auto;
+  }
+
+  .bento .tile.big .n {
+    font-size: clamp(2.5rem, 11vw, 3.5rem);
+  }
+
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .75rem;
+  }
+
+  .cards .flip {
+    height: 280px;
+  }
+
+  .skills {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tile.big,
+  .tile.wide,
+  .card.wide {
+    grid-column: auto;
+  }
+
+  .proj summary,
+  .proj .body {
+    min-width: 0;
+  }
+
+  .proj summary {
+    grid-template-columns: 1fr 28px;
+  }
+
+  .proj .body {
+    grid-template-columns: 1fr;
+  }
+
+  .proj .body ul {
+    grid-column: 1;
+  }
+
+  dl,
+  .st,
+  .paper .two,
+  .tick {
+    grid-template-columns: 1fr;
+  }
+
+  .btn,
+  .btns,
+  .row,
+  .crow,
+  .rad,
+  .slots,
+  .social,
+  footer .wrap {
+    min-width: 0;
+  }
+
+  .btns,
+  .row,
+  .rad,
+  .crow,
+  .social,
+  footer .wrap {
+    width: 100%;
+  }
+
+  .btns .btn,
+  .row .btn,
+  .rad label,
+  .crow input,
+  .crow .btn {
+    max-width: 100%;
+  }
+
+  .cform,
+  .card,
+  .plan,
+  .quote,
+  .score,
+  .tw,
+  .face,
+  .term,
+  .tbox,
+  .paper,
+  .stage,
+  .fp,
+  .type {
+    min-width: 0;
+  }
+
+  .paper,
+  .paper table,
+  .paper .meta,
+  .paper .tot {
+    width: 100%;
+  }
+
+  .paper .hd,
+  .paper .tot,
+  .item,
+  .crow,
+  .rad,
+  .kv {
+    grid-template-columns: 1fr;
+  }
+
+  .paper .meta {
+    text-align: left;
+  }
+
+  .item {
+    align-items: stretch;
+  }
+
+  .stage {
+    height: min(58vh, 440px);
+  }
+
+  .top nav {
+    flex-wrap: nowrap;
+  }
+
+  footer .wrap {
+    align-items: flex-start;
+  }
+
+  input,
+  select,
+  textarea,
+  button {
+    font-size: 16px;
+  }
+
+  pre,
+  code,
+  .out,
+  .tbody,
+  .enc,
+  .tbox,
+  .pw,
+  .pk,
+  .mail {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 420px) {
+  :root {
+    --mobile-gutter: .75rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(3rem, 16.5vw, 5rem) !important;
+  }
+
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .btns {
+    display: grid;
+  }
+
+  .social {
+    gap: .9rem;
+  }
+
+  .top .wrap {
+    gap: .35rem;
+  }
+}

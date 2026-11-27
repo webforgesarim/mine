@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Security notes – Joseph</title>
+<meta name="description" content="Short, practical notes on website security: basics, SQL injection, phishing and passwords, written in plain language.">
+<meta name="theme-color" content="#0A0F2A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0F2A;--ink:#EEF1F7;--mute:#A3AECB;--line:rgba(255,255,255,.16);--acc:#FF7A45;--g:#7CFFB2;--c:#5CE1E6;
+  --display:'Bricolage Grotesque','Segoe UI',Arial,sans-serif;--body:'Public Sans','Segoe UI',Arial,sans-serif;--mono:ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:dark;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:20px}
+body{margin:0;background:var(--bg) radial-gradient(60% 40% at 85% 0%,rgba(255,122,69,.16),transparent 70%) no-repeat;color:var(--ink);font:1.0625rem/1.7 var(--body);-webkit-font-smoothing:antialiased}
+a{color:var(--c)}
+:focus-visible{outline:3px solid var(--acc);outline-offset:3px;border-radius:6px}
+.wrap{width:min(760px,100% - 2.5rem);margin-inline:auto}
+h1,h2,h3{font-family:var(--display);margin:0;letter-spacing:-.02em;line-height:1.1}
+.top{border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;justify-content:space-between;align-items:center;height:64px;width:min(1100px,100% - 2.5rem)}
+.brand{font-family:var(--display);font-weight:800;font-size:1.2rem;text-decoration:none;color:var(--ink)}
+.brand span{color:var(--acc)}
+.top nav{display:flex;gap:1.4rem;font-size:.95rem;font-weight:500}
+.top nav a{text-decoration:none;color:var(--mute)}
+.top nav a:hover{color:var(--ink)}
+.intro{padding:clamp(2.5rem,7vw,4.5rem) 0 1.5rem}
+.intro h1{font-size:clamp(2.4rem,7vw,4.2rem);font-weight:800;letter-spacing:-.04em}
+.intro p{color:var(--mute);margin:1rem 0 0;max-width:56ch}
+.list{display:grid;gap:1rem;margin:1rem 0 4rem}
+.card{display:block;text-decoration:none;color:var(--ink);border:1px solid var(--line);border-radius:20px;padding:1.4rem 1.5rem;background:rgba(255,255,255,.05);transition:border-color .2s,transform .2s}
+.card:hover{border-color:var(--acc);transform:translateY(-2px)}
+.card h2{font-size:1.5rem;font-weight:600;margin:.3rem 0 .5rem}
+.card p{margin:0;color:var(--mute);font-size:.98rem}
+.meta{font:.82rem var(--mono);color:var(--g)}
+.post{display:none;padding:2.5rem 0 4rem}
+.post:target{display:block}
+main:has(.post:target) .intro,main:has(.post:target) .list{display:none}
+.back{display:inline-block;margin-bottom:1.5rem;font-size:.95rem}
+.post h1{font-size:clamp(2rem,6vw,3.2rem);font-weight:800;letter-spacing:-.03em;margin:.4rem 0 1.5rem}
+.post h2{font-size:1.5rem;font-weight:600;margin:2rem 0 .6rem}
+.post p,.post li{max-width:68ch}
+.post ul,.post ol{padding-left:1.3rem}
+.post li{margin:.5rem 0}
+.post li::marker{color:var(--acc)}
+pre{margin:1rem 0;padding:1rem 1.2rem;overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:rgba(0,0,0,.35);font:.9rem/1.6 var(--mono);color:var(--g)}
+.note{margin:2rem 0 0;padding:1.1rem 1.3rem;border:1px solid var(--line);border-left:3px solid var(--acc);border-radius:12px;background:rgba(255,255,255,.05)}
+.note p{margin:0}
+footer{border-top:1px solid var(--line);padding:1.5rem 0 2rem;color:var(--mute);font-size:.9rem}
+@media (prefers-reduced-motion:reduce){.card{transition:none}.card:hover{transform:none}}
+</style>
+<link rel="stylesheet" href="responsive.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="index.html">Joseph<span>.</span></a>
+  <nav><a href="tools.html">Tools</a><a href="index.html">Back to portfolio</a></nav>
+</div></header>
+
+<main class="wrap">
+  <section class="intro">
+    <h1>Security notes</h1>
+    <p>Short, practical notes on keeping websites and accounts safe, written in plain language for people who build and run small businesses.</p>
+  </section>
+
+  <div class="list">
+    <a class="card" href="#website-basics"><span class="meta">3 Nov 2026 · 4 min read</span><h2>Seven security basics every business website needs</h2><p>You do not need a big budget. These seven habits stop most of the attacks that small sites face.</p></a>
+    <a class="card" href="#sql-injection"><span class="meta">8 Nov 2026 · 4 min read</span><h2>SQL injection explained in plain words</h2><p>How one badly written line lets a stranger read your whole database, and the one-line fix.</p></a>
+    <a class="card" href="#phishing"><span class="meta">12 Nov 2026 · 3 min read</span><h2>How to spot a phishing message in 10 seconds</h2><p>Five quick checks, and what to do if you already clicked.</p></a>
+    <a class="card" href="#passwords"><span class="meta">17 Nov 2026 · 4 min read</span><h2>Why a long password beats a clever one</h2><p>Length, randomness and a password manager do more than symbols and capital letters.</p></a>
+  </div>
+
+  <article class="post" id="website-basics">
+    <a class="back" href="blog.html">&larr; All notes</a>
+    <span class="meta">3 Nov 2026 · 4 min read</span>
+    <h1>Seven security basics every business website needs</h1>
+    <p>Most hacked small websites were not targeted for who they are. They were found by automatic scanners looking for easy mistakes. Fix these seven and you are already harder to attack than most.</p>
+    <h2>1. Use HTTPS everywhere</h2>
+    <p>The padlock next to your address means traffic between the visitor and your site is encrypted. Free certificates are available, so there is no reason to skip it. Make sure the plain http address redirects to https.</p>
+    <h2>2. Keep software updated</h2>
+    <p>Your website platform, plugins and themes all get security fixes. Sites that run old versions are the easiest to break into. Turn on automatic updates where you can.</p>
+    <h2>3. Back up automatically, away from the server</h2>
+    <p>A backup stored on the same server disappears with the server. Keep a recent copy somewhere else, and try restoring it once so you know it works.</p>
+    <h2>4. Turn on two-step login</h2>
+    <p>Add a code from your phone to the admin panel, your hosting account, your domain registrar and your email. A stolen password alone is then not enough.</p>
+    <h2>5. Use unique, long passwords</h2>
+    <p>Reusing a password means one leak opens every account. A password manager makes unique passwords painless.</p>
+    <h2>6. Give people only the access they need</h2>
+    <p>Remove accounts of former staff and freelancers. Not everyone who edits content needs to be an administrator.</p>
+    <h2>7. Know when your site goes down</h2>
+    <p>A free uptime monitor can message you when something breaks, so you hear it before your customers do.</p>
+    <div class="note"><p>Want to see where you stand? Try the <a href="lab.html#security">two-minute security check</a> on my lab page.</p></div>
+  </article>
+
+  <article class="post" id="sql-injection">
+    <a class="back" href="blog.html">&larr; All notes</a>
+    <span class="meta">8 Nov 2026 · 4 min read</span>
+    <h1>SQL injection explained in plain words</h1>
+    <p>Many websites keep their data in a database and talk to it using a language called SQL. SQL injection happens when a site pastes what a visitor typed straight into a database question, and the visitor types something that changes the question.</p>
+    <h2>The mistake</h2>
+    <p>Imagine a login form. The code builds a query by gluing text together:</p>
+<pre>name = request.form["name"]
+query = "SELECT * FROM users WHERE name = '" + name + "'"</pre>
+    <p>If someone types a normal name, it works. But if they type <code>' OR 1=1 --</code>, the query becomes:</p>
+<pre>SELECT * FROM users WHERE name = '' OR 1=1 --'</pre>
+    <p>Because 1=1 is always true, the database returns every user. The <code>--</code> turns the rest of the line into a comment. The visitor has rewritten your question.</p>
+    <h2>The fix: parameterised queries</h2>
+    <p>Send the query and the visitor’s text separately. The database then treats the text only as data, never as instructions:</p>
+<pre>cursor.execute("SELECT * FROM users WHERE name = %s", (name,))</pre>
+    <p>Every serious database library supports this. If your code builds queries by joining strings, that is the first thing to change.</p>
+    <h2>Extra layers</h2>
+    <ul>
+      <li>Give the website’s database account only the permissions it needs, never full admin rights.</li>
+      <li>Do not show raw database errors to visitors. They reveal how your tables are built.</li>
+      <li>Validate input, for example by checking that an age field really contains a number.</li>
+    </ul>
+    <div class="note"><p>Practice spotting this and other attacks in my <a href="defense.html">Firewall Defence game</a>.</p></div>
+  </article>
+
+  <article class="post" id="phishing">
+    <a class="back" href="blog.html">&larr; All notes</a>
+    <span class="meta">12 Nov 2026 · 3 min read</span>
+    <h1>How to spot a phishing message in 10 seconds</h1>
+    <p>Phishing is a message that pretends to be a bank, a courier, a boss or a friend so that you click a link or share a secret. Take ten seconds and run these five checks.</p>
+    <ol>
+      <li><b>Look at the real sender.</b> The display name can say anything. Check the actual address, and watch for small spelling changes like a swapped letter.</li>
+      <li><b>Notice the pressure.</b> “Your account will be closed today” and “you have won a prize” are designed to make you act before you think.</li>
+      <li><b>Check where the link really goes.</b> On a computer, hover over it. On a phone, press and hold. If the address is not the company’s own site, do not open it.</li>
+      <li><b>Be careful with attachments.</b> Unexpected invoices, zip files and files ending in .exe are common ways to deliver malware.</li>
+      <li><b>Never share codes.</b> No genuine bank, courier or support agent will ask for the one-time code sent to your phone.</li>
+    </ol>
+    <h2>If you already clicked</h2>
+    <ul>
+      <li>Do not enter anything on the page. Close it.</li>
+      <li>If you did type a password, change it right away, and change it anywhere else you reused it.</li>
+      <li>Turn on two-step login for that account.</li>
+      <li>If money or a bank card is involved, contact your bank immediately using the number on your card.</li>
+    </ul>
+    <div class="note"><p>When unsure, do not use the message. Open the company’s site or app yourself and check there.</p></div>
+  </article>
+
+  <article class="post" id="passwords">
+    <a class="back" href="blog.html">&larr; All notes</a>
+    <span class="meta">17 Nov 2026 · 4 min read</span>
+    <h1>Why a long password beats a clever one</h1>
+    <p>“Joseph@123” looks strong because it has a capital, a symbol and numbers. Attackers know that pattern well, and guessing programs try it in the first few moments. What really protects you is length and randomness.</p>
+    <h2>Why length wins</h2>
+    <p>Every extra character multiplies the number of possible passwords. A longer password also makes a guessing attack take far longer, even if it uses only simple words, as long as the words are not predictable.</p>
+    <h2>Use a passphrase</h2>
+    <p>Pick four or more unrelated words at random, such as “lamp river orange stapler”. It is easy to remember and much harder to guess than a short, complicated password. Do not use a famous quote or a sentence about yourself.</p>
+    <h2>Use a password manager</h2>
+    <p>A manager creates a long random password for every site and remembers it for you. You only remember one strong master passphrase. This ends the habit of reusing passwords.</p>
+    <h2>Add two-step login</h2>
+    <p>Even a very good password can leak from a site you do not control. A second step means a leaked password alone is not enough.</p>
+    <h2>How sites should store passwords</h2>
+    <p>Well-built sites never store the password itself. They store a slow, salted hash made with a method such as bcrypt or Argon2, which makes each guess expensive for an attacker.</p>
+    <div class="note"><p>Try it yourself on the <a href="tools.html">Tools page</a>: check a password’s strength, see whether an old one has leaked, and watch a simulated attacker at work.</p></div>
+  </article>
+</main>
+
+<footer><div class="wrap">&copy; <span id="yr">2026</span> webforge studio Pvt. Ltd. General guidance, not a substitute for a professional security review.</div></footer>
+<script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
+<script src="code-rain.js" defer></script>
+</body>
+</html>

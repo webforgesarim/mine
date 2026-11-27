@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Joseph – Resume</title>
+<meta name="description" content="Resume of Joseph, web developer and founder of Webforge Studio ">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0C1226;--mute:#4F5A76;--line:#D5DAE8;--blue:#E8480C;--navy:#0B1023;
+  --display:'Bricolage Grotesque','Segoe UI',Arial,sans-serif;--body:'Public Sans','Segoe UI',Arial,sans-serif;color-scheme:light}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:#E4E8F1;color:var(--ink);font:15px/1.55 var(--body);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.bar{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.8rem clamp(1rem,4vw,2rem);background:var(--navy);color:#fff;font-size:.95rem}
+.bar a{text-decoration:none}
+.bar button{font:600 .95rem var(--body);background:var(--blue);color:#fff;border:0;border-radius:99px;padding:.55rem 1.3rem;cursor:pointer}
+.bar button:hover{opacity:.9}
+.paper{width:min(210mm,100%);min-height:296mm;margin:1.5rem auto 3rem;background:#fff;display:grid;grid-template-columns:68mm 1fr;box-shadow:0 10px 40px rgba(0,0,0,.18)}
+aside{background:var(--navy);color:#E3E8F6;padding:12mm 7mm}
+main{padding:12mm 10mm 10mm}
+h1,h2,h3{font-family:var(--display);margin:0;letter-spacing:-.02em}
+h1{font-size:2.6rem;font-weight:800;line-height:1;letter-spacing:-.04em}
+h1 span{color:var(--blue)}
+.role{margin:.5rem 0 1.4rem;color:var(--mute);font-weight:500}
+h2{font-size:1.05rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin:0 0 .7rem}
+aside h2{color:#FF8F5E}
+section{margin-bottom:1.5rem}
+main p{margin:0}
+.job{margin-bottom:1rem;padding-left:1rem;border-left:2px solid var(--line)}
+.job h3{font-size:1.05rem;font-weight:600;line-height:1.25}
+.job .when{font-size:.85rem;color:var(--mute);margin:.1rem 0 .3rem}
+.job p{font-size:.95rem}
+aside ul{list-style:none;margin:0;padding:0}
+aside li{padding:.28rem 0;font-size:.92rem;word-break:break-word}
+aside h3{font-size:.85rem;font-weight:600;color:#9AA5C2;margin:.8rem 0 .2rem;letter-spacing:0}
+aside section{margin-bottom:1.3rem}
+@media screen and (max-width:760px){.paper{grid-template-columns:1fr;margin:0 auto}}
+@page{size:A4;margin:0}
+@media print{
+  body{background:#fff;font-size:13px}
+  .bar{display:none}
+  .paper{margin:0;box-shadow:none;width:210mm;min-height:296mm;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  aside{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  h1{font-size:2.4rem}
+}
+</style>
+<link rel="stylesheet" href="responsive.css">
+</head>
+<body>
+<div class="bar">
+  <a href="index.html">Back</a>
+  <button type="button" id="print">Download PDF</button>
+</div>
+
+<div class="paper">
+  <aside>
+    <section>
+      <h2>Contact</h2>
+      <ul>
+        <li>mi35245620@gmail.com</li>
+        <li>instagram.com/sh1nobiee</li>
+        <li>your-site.netlify.app</li>
+      </ul>
+    </section>
+    <section>
+      <h2>Skills</h2>
+      <h3>Front end</h3>
+      <ul><li>HTML and CSS</li><li>JavaScript, React</li><li>Responsive layout</li></ul>
+      <h3>Back end</h3>
+      <ul><li>Node.js, Express</li><li>REST APIs</li><li>Authentication</li></ul>
+      <h3>Data</h3>
+      <ul><li>PostgreSQL, MongoDB</li><li>IndexedDB</li></ul>
+      <h3>Systems and security</h3>
+      <ul><li>Linux, Bash, SSH</li><li>Python scripting</li><li>OWASP Top 10, Nmap</li></ul>
+      <h3>Delivery</h3>
+      <ul><li>Git and GitHub</li><li>Deployment</li><li>Performance tuning</li></ul>
+    </section>
+    <section>
+      <h2>Languages</h2>
+      <ul><li>Urdu</li><li>English</li></ul>
+    </section>
+  </aside>
+
+  <main>
+    <h1>JOSEPH<span>.</span></h1>
+    <p class="role">Web developer and founder, Webforge Studio.</p>
+
+    <section>
+      <h2>Profile</h2>
+      <p>Web developer who builds fast, secure websites and web apps for local businesses. I handle design, code, launch and support myself, so the client works with one person from the first call to the last fix. Comfortable on Linux servers and with the security basics that keep a site safe.</p>
+    </section>
+
+    <section>
+      <h2>Experience</h2>
+      <div class="job"><h3>Web developer</h3><p class="when">2026 to now</p><p>Building and shipping real projects with JavaScript, Python and Linux.</p></div>
+    </section>
+
+    <section>
+      <h2>Selected projects</h2>
+      <div class="job"><h3>webforge studio</h3><p class="when">2026 | HTML, CSS, JavaScript, Python, Django</p><p>A multi-section platform with a business directory, AI tools, jobs, learning and a dashboard, backed by a Python and Django API with an admin panel.</p></div>
+      <div class="job"><h3>Privacy X-Ray</h3><p class="when">2026 | JavaScript, Web Crypto</p><p>Shows what a browser reveals to every website: a fingerprint ID, fonts, screen, permissions and typing rhythm. Runs fully in the browser.</p></div>
+      <div class="job"><h3>Live Earth</h3><p class="when">2026 | JavaScript, MapLibre, USGS API</p><p>A 3D globe on a real map with countries and streets, showing live earthquakes from the USGS feed.</p></div>
+      <div class="job"><h3>JosephOS</h3><p class="when">2026 | JavaScript</p><p>This portfolio as a desktop that runs in the browser, with windows, a taskbar, a terminal and notes.</p></div>
+    </section>
+  </main>
+</div>
+
+<script>
+document.getElementById('print').addEventListener('click',function(){window.print()});
+</script>
+</body>
+</html>

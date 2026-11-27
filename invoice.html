@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Invoice and quotation generator | Joseph</title>
+<meta name="description" content="Fill in your items and get a clean invoice or quotation you can save as a PDF. Everything stays in your browser.">
+<meta name="theme-color" content="#0A0F2A">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0F2A;--ink:#EEF1F7;--mute:#A3AECB;--line:rgba(255,255,255,.18);--acc:#FF7A45;--bad:#FF8A80;
+  --display:'Bricolage Grotesque','Segoe UI',Arial,sans-serif;--body:'Public Sans','Segoe UI',Arial,sans-serif;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:1rem/1.55 var(--body)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px;border-radius:6px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:.9rem clamp(1rem,3vw,2rem);border-bottom:1px solid var(--line)}
+.top a{text-decoration:none;color:var(--mute);font-size:.92rem}
+.top .brand{font:800 1.2rem var(--display);color:var(--ink)}.brand span{color:var(--acc)}
+.app{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1.2rem;max-width:1300px;margin:0 auto;padding:1.5rem clamp(1rem,3vw,2rem) 3rem}
+h1{font:800 clamp(1.8rem,5vw,2.8rem)/1.05 var(--display);letter-spacing:-.03em;margin:0 0 .4rem}
+.lead,.note{color:var(--mute)}.lead{margin:0 0 1.2rem}.note{font-size:.85rem;margin:.4rem 0 0}
+.card{border:1px solid var(--line);border-radius:18px;padding:1.1rem;background:rgba(255,255,255,.05);display:grid;gap:.8rem;margin-bottom:1rem}
+.card h2{font:800 1.05rem var(--display);margin:0}
+label{font-size:.82rem;font-weight:600;color:var(--mute)}
+input,select,textarea{width:100%;background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:10px;padding:.6rem .75rem}
+textarea{min-height:76px;resize:vertical}
+select option{color:#0A0F2A;background:#fff}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--acc)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.7rem}
+.fld{display:grid;gap:.25rem;min-width:0}
+.seg{display:flex;gap:.4rem}.seg button{flex:1;padding:.55rem;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.06);cursor:pointer;font-weight:600}
+.seg button[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:#0A0F2A}
+.item{display:grid;grid-template-columns:1fr 64px 96px auto;gap:.4rem;align-items:end}
+.item .del{padding:.55rem .7rem;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.06);cursor:pointer}
+.item .del:hover{border-color:var(--bad);color:var(--bad)}
+.btn{padding:.65rem 1.2rem;border-radius:99px;border:2px solid var(--ink);background:none;cursor:pointer;font-weight:600}
+.btn:hover{background:var(--ink);color:var(--bg)}
+.btn.p{background:var(--acc);border-color:var(--acc);color:#0A0F2A}.btn.p:hover{opacity:.9;background:var(--acc)}
+.row{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center}
+.pvw{position:sticky;top:1rem;align-self:start}
+.paper{background:#fff;color:#12163A;border-radius:6px;padding:clamp(1.2rem,3vw,2.2rem);font-size:.92rem;line-height:1.5;box-shadow:0 20px 50px rgba(0,0,0,.45)}
+.paper h2{font:800 1.9rem var(--display);margin:0;color:#12163A;letter-spacing:-.02em}
+.paper .hd{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1.4rem;padding-bottom:1rem;border-bottom:3px solid #E8480C}
+.paper .meta{text-align:right;font-size:.85rem;color:#4F557D}.paper .meta b{color:#12163A}
+.paper .two{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.3rem}
+.paper small{display:block;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:#4F557D;margin-bottom:.2rem}
+.paper .t{white-space:pre-wrap;word-break:break-word}
+.paper table{width:100%;border-collapse:collapse;margin-bottom:1rem}
+.paper th{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;text-align:right;color:#4F557D;padding:.45rem .4rem;border-bottom:1px solid #C3CBDD}
+.paper td{padding:.5rem .4rem;border-bottom:1px solid #E4E8F4;text-align:right;vertical-align:top}
+.paper th:first-child,.paper td:first-child{text-align:left;word-break:break-word}
+.paper .tot{margin-left:auto;width:min(280px,100%)}
+.paper .tot div{display:flex;justify-content:space-between;padding:.25rem 0;gap:1rem}
+.paper .tot .g{font-weight:800;font-size:1.15rem;border-top:2px solid #12163A;margin-top:.3rem;padding-top:.5rem}
+.paper .nt{margin-top:1.2rem;padding-top:.8rem;border-top:1px solid #E4E8F4;font-size:.85rem;color:#4F557D}
+.paper .none{color:#9AA0B8;font-style:italic}
+@media (max-width:900px){.app{grid-template-columns:1fr}.pvw{position:static}.item{grid-template-columns:1fr 56px 84px auto}}
+@media print{
+  @page{size:A4;margin:14mm}
+  html,body{background:#fff!important}
+  .top,.edit,.lead,h1,.note-hide{display:none!important}
+  .app{display:block;padding:0;max-width:none}
+  .pvw{position:static}
+  .paper{box-shadow:none;border-radius:0;padding:0;font-size:11pt}
+  .paper *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+<link rel="stylesheet" href="responsive.css">
+</head>
+<body>
+<header class="top"><a class="brand" href="index.html">Joseph<span>.</span></a><a href="index.html">Back to portfolio</a></header>
+<div class="app">
+  <div class="edit">
+    <h1>Invoice and quotation</h1>
+    <p class="lead">Fill in the details and watch the document build itself. Save it as a PDF when you are happy. Nothing leaves your browser.</p>
+
+    <section class="card">
+      <div class="seg" role="group" aria-label="Document type">
+        <button type="button" data-t="Invoice" aria-pressed="true">Invoice</button>
+        <button type="button" data-t="Quotation" aria-pressed="false">Quotation</button>
+      </div>
+      <div class="g3">
+        <div class="fld"><label for="no">Number</label><input id="no" type="text" maxlength="30"></div>
+        <div class="fld"><label for="dt">Date</label><input id="dt" type="date"></div>
+        <div class="fld"><label for="du" id="duL">Due date</label><input id="du" type="date"></div>
+      </div>
+      <div class="fld"><label for="cu">Currency</label>
+        <select id="cu"><option>PKR</option><option>USD</option><option>EUR</option><option>GBP</option><option>AED</option><option>SAR</option></select></div>
+    </section>
+
+    <section class="card"><h2>From (you)</h2>
+      <div class="fld"><label for="fn">Name or business</label><input id="fn" type="text" maxlength="80" autocomplete="organization"></div>
+      <div class="fld"><label for="fa">Address, email, phone</label><textarea id="fa" maxlength="300"></textarea></div>
+      <label style="display:flex;gap:.5rem;align-items:center;font-weight:500"><input type="checkbox" id="rm" style="width:auto"> Remember my details in this browser</label>
+    </section>
+
+    <section class="card"><h2>To (your client)</h2>
+      <div class="fld"><label for="tn">Client name</label><input id="tn" type="text" maxlength="80"></div>
+      <div class="fld"><label for="ta">Client address or email</label><textarea id="ta" maxlength="300"></textarea></div>
+    </section>
+
+    <section class="card"><h2>Items</h2>
+      <div id="items"></div>
+      <div class="row"><button class="btn" id="add" type="button">Add item</button></div>
+    </section>
+
+    <section class="card"><h2>Adjustments (optional)</h2>
+      <div class="g3">
+        <div class="fld"><label for="ds">Discount %</label><input id="ds" type="number" min="0" max="100" step="0.5" placeholder="0"></div>
+        <div class="fld"><label for="tl">Tax label</label><input id="tl" type="text" maxlength="20" placeholder="Tax"></div>
+        <div class="fld"><label for="tx">Tax rate %</label><input id="tx" type="number" min="0" max="100" step="0.5" placeholder="0"></div>
+      </div>
+      <p class="note">You enter the tax rate yourself. This tool does not know your local tax rules, so please check them.</p>
+      <div class="fld"><label for="nt">Notes or payment terms</label><textarea id="nt" maxlength="500" placeholder="For example: payment within 7 days by bank transfer."></textarea></div>
+    </section>
+
+    <div class="row"><button class="btn p" id="pr" type="button">Save as PDF / Print</button><button class="btn" id="rs" type="button">Clear everything</button></div>
+    <p class="note">In the print window, choose &ldquo;Save as PDF&rdquo; as the destination. Turn off &ldquo;Headers and footers&rdquo; for a clean page.</p>
+  </div>
+
+  <aside class="pvw" aria-label="Document preview">
+    <div class="paper" id="paper">
+      <div class="hd"><h2 id="pT">Invoice</h2><div class="meta"><div><b id="pN"></b></div><div id="pD"></div><div id="pU"></div></div></div>
+      <div class="two"><div><small>From</small><div class="t" id="pF"></div></div><div><small>Bill to</small><div class="t" id="pTo"></div></div></div>
+      <table><thead><tr><th>Description</th><th>Qty</th><th>Rate</th><th>Amount</th></tr></thead><tbody id="pB"></tbody></table>
+      <div class="tot" id="pS"></div>
+      <div class="nt" id="pNt" hidden></div>
+    </div>
+  </aside>
+</div>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)};
+  var E=function(t,x){var e=document.createElement(t);if(x!==undefined)e.textContent=x;return e};
+  var get=function(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}};
+  var put=function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+  var del=function(k){try{localStorage.removeItem(k)}catch(e){}};
+  var p2=function(n){return (n<10?'0':'')+n};
+  var type='Invoice',items=[{d:'',q:1,r:''}];
+
+  var today=new Date(),iso=function(d){return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())};
+  var plus=function(n){var d=new Date();d.setDate(d.getDate()+n);return iso(d)};
+  var defaults=function(){
+    $('no').value='INV-'+today.getFullYear()+p2(today.getMonth()+1)+'-001';
+    $('dt').value=iso(today);$('du').value=plus(7);
+  };
+  defaults();
+  var mem=get('inv-from');
+  if(mem){$('fn').value=mem.n||'';$('fa').value=mem.a||'';$('rm').checked=true}
+
+  var fmt=function(v){
+    try{return new Intl.NumberFormat('en-US',{style:'currency',currency:$('cu').value}).format(v)}
+    catch(e){return $('cu').value+' '+v.toFixed(2)}
+  };
+  var nice=function(s){
+    if(!s)return '';var d=new Date(s+'T00:00:00');
+    return isNaN(d)?s:d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+  };
+  var num=function(v){var n=parseFloat(v);return isFinite(n)&&n>0?n:0};
+
+  var rows=function(){
+    var box=$('items');box.textContent='';
+    items.forEach(function(it,i){
+      var r=E('div');r.className='item';
+      var mk=function(lab,type,val,ph,cb,extra){
+        var f=E('div');f.className='fld';var l=E('label',lab),inp=E('input');
+        inp.type=type;inp.value=val;if(ph)inp.placeholder=ph;if(extra)for(var k in extra)inp.setAttribute(k,extra[k]);
+        inp.setAttribute('aria-label',lab+' of item '+(i+1));
+        inp.addEventListener('input',function(){cb(inp.value);draw()});
+        l.setAttribute('aria-hidden','true');f.appendChild(l);f.appendChild(inp);return f;
+      };
+      r.appendChild(mk('Description','text',it.d,'Website design',function(v){it.d=v},{maxlength:'120'}));
+      r.appendChild(mk('Qty','number',it.q,'1',function(v){it.q=v},{min:'0',step:'any'}));
+      r.appendChild(mk('Rate','number',it.r,'0',function(v){it.r=v},{min:'0',step:'any'}));
+      var b=E('button','\u00D7');b.type='button';b.className='del';b.setAttribute('aria-label','Remove item '+(i+1));
+      b.addEventListener('click',function(){if(items.length>1){items.splice(i,1)}else{items[0]={d:'',q:1,r:''}}rows();draw()});
+      r.appendChild(b);box.appendChild(r);
+    });
+  };
+
+  var draw=function(){
+    $('pT').textContent=type;
+    $('pN').textContent=$('no').value.trim()||'No number';
+    $('pD').textContent='Date: '+nice($('dt').value);
+    $('pU').textContent=$('du').value?(type==='Invoice'?'Due: ':'Valid until: ')+nice($('du').value):'';
+    $('duL').textContent=type==='Invoice'?'Due date':'Valid until';
+    var f=$('pF');f.textContent='';
+    if($('fn').value.trim()||$('fa').value.trim()){var b=E('b',$('fn').value.trim());f.appendChild(b);f.appendChild(document.createTextNode(($('fn').value.trim()?'\n':'')+$('fa').value.trim()))}
+    else f.appendChild(E('span','Your details')).className='none';
+    var t=$('pTo');t.textContent='';
+    if($('tn').value.trim()||$('ta').value.trim()){t.appendChild(E('b',$('tn').value.trim()));t.appendChild(document.createTextNode(($('tn').value.trim()?'\n':'')+$('ta').value.trim()))}
+    else t.appendChild(E('span','Client details')).className='none';
+
+    var tb=$('pB');tb.textContent='';var sub=0;
+    items.forEach(function(it){
+      var q=num(it.q),r=num(it.r),a=q*r;
+      if(!it.d.trim()&&!r)return;
+      sub+=a;
+      var tr=E('tr');tr.appendChild(E('td',it.d.trim()||'Item'));tr.appendChild(E('td',String(q)));tr.appendChild(E('td',fmt(r)));tr.appendChild(E('td',fmt(a)));tb.appendChild(tr);
+    });
+    if(!tb.children.length){var tr=E('tr'),td=E('td','Add your first item');td.colSpan=4;td.className='none';tr.appendChild(td);tb.appendChild(tr)}
+
+    var ds=Math.min(100,num($('ds').value)),tx=num($('tx').value),
+        disc=sub*ds/100,base=sub-disc,tax=base*tx/100,tot=base+tax,S=$('pS');
+    S.textContent='';
+    var line=function(a,b,c){var d=E('div');d.appendChild(E('span',a));d.appendChild(E('span',b));if(c)d.className=c;S.appendChild(d)};
+    line('Subtotal',fmt(sub));
+    if(ds)line('Discount ('+ds+'%)','-'+fmt(disc));
+    if(tx)line(($('tl').value.trim()||'Tax')+' ('+tx+'%)',fmt(tax));
+    line('Total',fmt(tot),'g');
+    var n=$('nt').value.trim();$('pNt').hidden=!n;$('pNt').textContent=n;
+    if($('rm').checked)put('inv-from',{n:$('fn').value,a:$('fa').value});
+  };
+
+  ['no','dt','du','cu','fn','fa','tn','ta','ds','tl','tx','nt'].forEach(function(i){$(i).addEventListener('input',draw);$(i).addEventListener('change',draw)});
+  $('rm').addEventListener('change',function(){if($('rm').checked)put('inv-from',{n:$('fn').value,a:$('fa').value});else del('inv-from')});
+  document.querySelectorAll('.seg button').forEach(function(b){b.addEventListener('click',function(){
+    type=b.dataset.t;
+    document.querySelectorAll('.seg button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});
+    var no=$('no').value;
+    if(type==='Quotation'&&/^INV-/.test(no))$('no').value=no.replace(/^INV-/,'QUO-');
+    if(type==='Invoice'&&/^QUO-/.test(no))$('no').value=no.replace(/^QUO-/,'INV-');
+    $('du').value=plus(type==='Invoice'?7:14);
+    draw();
+  })});
+  $('add').addEventListener('click',function(){if(items.length<30){items.push({d:'',q:1,r:''});rows();draw();var l=$('items').querySelectorAll('input[type="text"]');l[l.length-1].focus()}});
+  $('pr').addEventListener('click',function(){
+    var old=document.title;document.title=type+'-'+($('no').value.trim()||'document');
+    var back=function(){document.title=old;removeEventListener('afterprint',back)};
+    addEventListener('afterprint',back);window.print();
+  });
+  $('rs').addEventListener('click',function(){
+    if(!confirm('Clear everything on this page?'))return;
+    ['fn','fa','tn','ta','ds','tl','tx','nt'].forEach(function(i){$(i).value=''});
+    if($('rm').checked){$('fn').value=(mem&&mem.n)||'';$('fa').value=(mem&&mem.a)||''}
+    items=[{d:'',q:1,r:''}];defaults();rows();draw();
+  });
+  rows();draw();
+})();
+</script>
+</body>
+</html>
